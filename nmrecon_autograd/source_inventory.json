@@ -1,0 +1,41 @@
+{
+  "created_utc": "2026-11-05T07:36:23.002046+00:00",
+  "scope": "source inspection only; no numerical validation or source/binary equivalence established",
+  "files": [
+    {
+      "path": "/home/wengfenghua/nmrecon_raw/nmrecon0708/NMRecon/nmrecon/src/nmrecon.cpp",
+      "size_bytes": 4288,
+      "sha256": "37739c6ad67e6fa2255671502ead459392cf2f1cb7bf0c7a5a7676a0a3a1acb7"
+    },
+    {
+      "path": "/home/wengfenghua/nmrecon_raw/nmrecon0708/NMRecon/nmrecon/src/cpp/reconstructor.cpp",
+      "size_bytes": 36160,
+      "sha256": "dc02953f42cf233b8150ad9836bb603fcadd01a346acd3610a34272e07a06c34"
+    },
+    {
+      "path": "/home/wengfenghua/nmrecon_raw/nmrecon0708/NMRecon/nmrecon/include/cuda/reconstruction/attenuation.h",
+      "size_bytes": 1769,
+      "sha256": "e3e8e19877ab5e34871a4d9563fe06636d4371bd95c47970d524fdf856fb3abf"
+    },
+    {
+      "path": "/home/wengfenghua/nmrecon_raw/nmrecon0708/NMRecon/nmrecon/build/bin/nmrecon",
+      "size_bytes": 25896648,
+      "sha256": "ba6fdeac6c759330feed2f94faa049dabef39e0d36869da59af1e043bf645be1"
+    },
+    {
+      "path": "/home/wengfenghua/workspace/SparseSPECT/ctless/nmrecon_system_matrix.py",
+      "size_bytes": 15097,
+      "sha256": "117fb72ce0f73e52cc7d02ba73dd098170ca914cb9f4d8fcec7f39852be5d8cc"
+    },
+    {
+      "path": "/home/wengfenghua/workspace/SparseSPECT/ctless/models/true_unroll_spect.py",
+      "size_bytes": 24359,
+      "sha256": "1571c954bcd07d6ce9e30b3a16f8de7de82631708110a0537238d3e7dd87e2a4"
+    },
+    {
+      "path": "/home/wengfenghua/sparseSPECT/0913ctless/new1022/model.py",
+      "size_bytes": 41994,
+      "sha256": "377ca1adabfe61d51ce9e9e1a1bdcac57dd8846b3a03cb75146cf8f48c12ec84"
+    }
+  ]
+}

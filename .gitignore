@@ -2,11 +2,26 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
+*.so.*
+*.dylib
+*.dll
+*.a
+*.o
+*.obj
+
+# C/C++ build artifacts
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
 
 # PyTorch checkpoints and large binaries (> 100 MB disallowed by GitHub)
 *.pt
 *.pth
 *.ckpt
+*.bin
 sample_inference_*.pt
 
 # Training runs, logs, checkpoints, outputs
@@ -37,3 +52,4 @@ env/
 .vscode/
 .idea/
 .DS_Store
+*.bak

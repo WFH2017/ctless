@@ -1,0 +1,105 @@
+{
+  "scope": "float32 mu interface; no autograd certification",
+  "relative_l2_tolerance": 0.0001,
+  "original_sha256": "ba6fdeac6c759330feed2f94faa049dabef39e0d36869da59af1e043bf645be1",
+  "new_sha256": "acbe620371a4d0bddba5468ba6849939631dcaf2d914153053f6eccf731e2386",
+  "results": {
+    "ge": {
+      "config_sha256": "2af9e134ab01786676e1f1ce8dd5e44ecef10ee89ea3bc4847bfeeb08a47531b",
+      "validation_split_sha256": "ae3d78db5dc9092325b9868a923f491052b2a8773478dee3f8a4d0f91cb84d5d",
+      "shape_zyx": [
+        128,
+        128,
+        128
+      ],
+      "checks": {
+        "original_vs_new_ct": {
+          "relative_l2": 2.804319466266412e-07,
+          "passed": true,
+          "size": 983040
+        },
+        "ct_vs_float_mu": {
+          "relative_l2": 2.7508009645002334e-07,
+          "passed": true,
+          "size": 983040
+        },
+        "zero_mu_vs_noac": {
+          "relative_l2": 3.2493215581258567e-07,
+          "passed": true,
+          "size": 983040
+        },
+        "mu_changes_projection": {
+          "passed": true
+        },
+        "backprojection_equivalence": {
+          "relative_l2": 3.731727382576758e-08,
+          "passed": true,
+          "size": 2097152
+        },
+        "reject_wrong_size": {
+          "passed": true
+        },
+        "reject_negative": {
+          "passed": true
+        },
+        "reject_nan": {
+          "passed": true
+        }
+      },
+      "mu_cm_range": [
+        0.0,
+        0.3040306568145752
+      ],
+      "projection_float_count": 983040
+    },
+    "siemens": {
+      "config_sha256": "fa004a8b7b218882f6dd2e9ced987e02c01089b3cbe27a39f85e3c78607af01b",
+      "validation_split_sha256": "7700573a7a44924051b2bea768a926a3b8abbd09c050effd6a0a1068d07c1d6e",
+      "shape_zyx": [
+        128,
+        128,
+        128
+      ],
+      "checks": {
+        "original_vs_new_ct": {
+          "relative_l2": 2.383161698643306e-07,
+          "passed": true,
+          "size": 1048576
+        },
+        "ct_vs_float_mu": {
+          "relative_l2": 2.3160494087573223e-07,
+          "passed": true,
+          "size": 1048576
+        },
+        "zero_mu_vs_noac": {
+          "relative_l2": 2.8631706782479747e-07,
+          "passed": true,
+          "size": 1048576
+        },
+        "mu_changes_projection": {
+          "passed": true
+        },
+        "backprojection_equivalence": {
+          "relative_l2": 4.292670166248764e-08,
+          "passed": true,
+          "size": 2097152
+        },
+        "reject_wrong_size": {
+          "passed": true
+        },
+        "reject_negative": {
+          "passed": true
+        },
+        "reject_nan": {
+          "passed": true
+        }
+      },
+      "mu_cm_range": [
+        0.0,
+        0.3218500018119812
+      ],
+      "projection_float_count": 1048576
+    }
+  },
+  "passed": true
+}
