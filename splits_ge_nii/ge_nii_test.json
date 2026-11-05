@@ -1,0 +1,776 @@
+{
+  "split": "ge_nii_test",
+  "num_cases": 154,
+  "cases": [
+    {
+      "case_id": "2024-10-3009-JiaXiaoling-\u672a\u89c1\u5f02\u5e38\u65e0\u6807\u6ce8",
+      "patient_id": "2024-10-3009-JiaXiaoling-\u672a\u89c1\u5f02\u5e38\u65e0\u6807\u6ce8",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-10-3009-JiaXiaoling-\u672a\u89c1\u5f02\u5e38\u65e0\u6807\u6ce8"
+    },
+    {
+      "case_id": "1F0A7060970E6266AD8DEFC684EEBD69",
+      "patient_id": "1F0A7060970E6266AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A7060970E6266AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F06126F3A686BC6961F596D569F0F56",
+      "patient_id": "1F06126F3A686BC6961F596D569F0F56",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F06126F3A686BC6961F596D569F0F56"
+    },
+    {
+      "case_id": "2024-11-2910-PengXuhong-\u56fe\u50cf\u9519\u8bef",
+      "patient_id": "2024-11-2910-PengXuhong-\u56fe\u50cf\u9519\u8bef",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-11-2910-PengXuhong-\u56fe\u50cf\u9519\u8bef"
+    },
+    {
+      "case_id": "1F0A724940C66BF0AD8DEFC684EEBD69",
+      "patient_id": "1F0A724940C66BF0AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A724940C66BF0AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "2024-10-2306-QuanShengLi",
+      "patient_id": "2024-10-2306-QuanShengLi",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-10-2306-QuanShengLi"
+    },
+    {
+      "case_id": "2024-08-2808-ChenJingYin",
+      "patient_id": "2024-08-2808-ChenJingYin",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-08-2808-ChenJingYin"
+    },
+    {
+      "case_id": "2024060711ZhangYuanYuan",
+      "patient_id": "2024060711ZhangYuanYuan",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024060711ZhangYuanYuan"
+    },
+    {
+      "case_id": "1F11B58903B26EF294A8C7F594C5A3B8",
+      "patient_id": "1F11B58903B26EF294A8C7F594C5A3B8",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F11B58903B26EF294A8C7F594C5A3B8"
+    },
+    {
+      "case_id": "1F11D005CD886922937EFB4E6FA8FBA0",
+      "patient_id": "1F11D005CD886922937EFB4E6FA8FBA0",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F11D005CD886922937EFB4E6FA8FBA0"
+    },
+    {
+      "case_id": "1F0920B016ED63BD8F22BD714AC2AD36",
+      "patient_id": "1F0920B016ED63BD8F22BD714AC2AD36",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0920B016ED63BD8F22BD714AC2AD36"
+    },
+    {
+      "case_id": "2024060712RenShaoXiu",
+      "patient_id": "2024060712RenShaoXiu",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024060712RenShaoXiu"
+    },
+    {
+      "case_id": "XIE_WEN_MING",
+      "patient_id": "XIE_WEN_MING",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/XIE_WEN_MING"
+    },
+    {
+      "case_id": "1F0A70F80E1F6831AD8DEFC684EEBD69",
+      "patient_id": "1F0A70F80E1F6831AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A70F80E1F6831AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "2024070409XieXuQiang",
+      "patient_id": "2024070409XieXuQiang",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024070409XieXuQiang"
+    },
+    {
+      "case_id": "1F0A70E4E6CC6EA7AD8DEFC684EEBD69",
+      "patient_id": "1F0A70E4E6CC6EA7AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A70E4E6CC6EA7AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F0A705590AD638CAD8DEFC684EEBD69",
+      "patient_id": "1F0A705590AD638CAD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A705590AD638CAD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F083B0D23F36F7587301D2150633AE3",
+      "patient_id": "1F083B0D23F36F7587301D2150633AE3",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F083B0D23F36F7587301D2150633AE3"
+    },
+    {
+      "case_id": "1F0A7023AF9A6031AD8DEFC684EEBD69",
+      "patient_id": "1F0A7023AF9A6031AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A7023AF9A6031AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "2024-09-1213-TangYaLi",
+      "patient_id": "2024-09-1213-TangYaLi",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-09-1213-TangYaLi"
+    },
+    {
+      "case_id": "2024-09-2408-QiuChunSheng",
+      "patient_id": "2024-09-2408-QiuChunSheng",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-09-2408-QiuChunSheng"
+    },
+    {
+      "case_id": "1F0A70D35ADF620EAD8DEFC684EEBD69",
+      "patient_id": "1F0A70D35ADF620EAD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A70D35ADF620EAD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "2504181601116001_LIU_LI_JUN",
+      "patient_id": "2504181601116001_LIU_LI_JUN",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2504181601116001_LIU_LI_JUN"
+    },
+    {
+      "case_id": "1F0A805F6E9864C09A395D57CC7AC485",
+      "patient_id": "1F0A805F6E9864C09A395D57CC7AC485",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A805F6E9864C09A395D57CC7AC485"
+    },
+    {
+      "case_id": "1F12BEB831356197A50EAB207AED7404",
+      "patient_id": "1F12BEB831356197A50EAB207AED7404",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F12BEB831356197A50EAB207AED7404"
+    },
+    {
+      "case_id": "2024-12-3009-LaiYanhua",
+      "patient_id": "2024-12-3009-LaiYanhua",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-12-3009-LaiYanhua"
+    },
+    {
+      "case_id": "1F14901975EC6C65A50EAB207AED7404",
+      "patient_id": "1F14901975EC6C65A50EAB207AED7404",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F14901975EC6C65A50EAB207AED7404"
+    },
+    {
+      "case_id": "2024-12-3010-WuXiyin",
+      "patient_id": "2024-12-3010-WuXiyin",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-12-3010-WuXiyin"
+    },
+    {
+      "case_id": "1F0A725D9E0B64F2AD8DEFC684EEBD69",
+      "patient_id": "1F0A725D9E0B64F2AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A725D9E0B64F2AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "2024-11-0109-YeYuzan",
+      "patient_id": "2024-11-0109-YeYuzan",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-11-0109-YeYuzan"
+    },
+    {
+      "case_id": "QIU_YUN_WEI",
+      "patient_id": "QIU_YUN_WEI",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/QIU_YUN_WEI"
+    },
+    {
+      "case_id": "1F0A7240D0986565AD8DEFC684EEBD69",
+      "patient_id": "1F0A7240D0986565AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A7240D0986565AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "YANG_JUN_MING",
+      "patient_id": "YANG_JUN_MING",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/YANG_JUN_MING"
+    },
+    {
+      "case_id": "1F0A725DC284668EAD8DEFC684EEBD69",
+      "patient_id": "1F0A725DC284668EAD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A725DC284668EAD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F0A70D4BE4D6D35AD8DEFC684EEBD69",
+      "patient_id": "1F0A70D4BE4D6D35AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A70D4BE4D6D35AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "2024-08-2100-LU_LI_JUAN",
+      "patient_id": "2024-08-2100-LU_LI_JUAN",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-08-2100-LU_LI_JUAN"
+    },
+    {
+      "case_id": "2024072308ZhouXinLian",
+      "patient_id": "2024072308ZhouXinLian",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024072308ZhouXinLian"
+    },
+    {
+      "case_id": "1F12760FC59C620F93312B0ED0E43680",
+      "patient_id": "1F12760FC59C620F93312B0ED0E43680",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F12760FC59C620F93312B0ED0E43680"
+    },
+    {
+      "case_id": "2024-09-1909-ChenMeiJian",
+      "patient_id": "2024-09-1909-ChenMeiJian",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-09-1909-ChenMeiJian"
+    },
+    {
+      "case_id": "2025-01-0709-XieXingxian",
+      "patient_id": "2025-01-0709-XieXingxian",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2025-01-0709-XieXingxian"
+    },
+    {
+      "case_id": "1F0A71DC8D806F05AD8DEFC684EEBD69",
+      "patient_id": "1F0A71DC8D806F05AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A71DC8D806F05AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F0A7F67C9C86DC98DCBF7E3FADA4C1B",
+      "patient_id": "1F0A7F67C9C86DC98DCBF7E3FADA4C1B",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A7F67C9C86DC98DCBF7E3FADA4C1B"
+    },
+    {
+      "case_id": "2024-12-1211-WuYan",
+      "patient_id": "2024-12-1211-WuYan",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-12-1211-WuYan"
+    },
+    {
+      "case_id": "1F0A71DBDB8E68A2AD8DEFC684EEBD69",
+      "patient_id": "1F0A71DBDB8E68A2AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A71DBDB8E68A2AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F092D4A91CD6DEFA4F1CDBFA14A2AE5",
+      "patient_id": "1F092D4A91CD6DEFA4F1CDBFA14A2AE5",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F092D4A91CD6DEFA4F1CDBFA14A2AE5"
+    },
+    {
+      "case_id": "1F0A725F25A460A2AD8DEFC684EEBD69",
+      "patient_id": "1F0A725F25A460A2AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A725F25A460A2AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F12DA9745DF6215A50EAB207AED7404",
+      "patient_id": "1F12DA9745DF6215A50EAB207AED7404",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F12DA9745DF6215A50EAB207AED7404"
+    },
+    {
+      "case_id": "1F0A7F6B0F436B4A8DCBF7E3FADA4C1B",
+      "patient_id": "1F0A7F6B0F436B4A8DCBF7E3FADA4C1B",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A7F6B0F436B4A8DCBF7E3FADA4C1B"
+    },
+    {
+      "case_id": "WU_YE_CHAO",
+      "patient_id": "WU_YE_CHAO",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/WU_YE_CHAO"
+    },
+    {
+      "case_id": "1F0A720C9AEF6987AD8DEFC684EEBD69",
+      "patient_id": "1F0A720C9AEF6987AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A720C9AEF6987AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F08C56959826DF187301D2150633AE3",
+      "patient_id": "1F08C56959826DF187301D2150633AE3",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F08C56959826DF187301D2150633AE3"
+    },
+    {
+      "case_id": "1F0A7F8E191D6F62B2984B76F96A272E",
+      "patient_id": "1F0A7F8E191D6F62B2984B76F96A272E",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A7F8E191D6F62B2984B76F96A272E"
+    },
+    {
+      "case_id": "2025-03-0511-YanHonggui",
+      "patient_id": "2025-03-0511-YanHonggui",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2025-03-0511-YanHonggui"
+    },
+    {
+      "case_id": "1F0A71FB848769A5AD8DEFC684EEBD69",
+      "patient_id": "1F0A71FB848769A5AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A71FB848769A5AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "2024-12-0410-XiaXiubo",
+      "patient_id": "2024-12-0410-XiaXiubo",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-12-0410-XiaXiubo"
+    },
+    {
+      "case_id": "2025-03-1113-YangGuanghua",
+      "patient_id": "2025-03-1113-YangGuanghua",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2025-03-1113-YangGuanghua"
+    },
+    {
+      "case_id": "2024071909SongDanFeng",
+      "patient_id": "2024071909SongDanFeng",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024071909SongDanFeng"
+    },
+    {
+      "case_id": "1F0A726958EE6D9BAD8DEFC684EEBD69",
+      "patient_id": "1F0A726958EE6D9BAD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A726958EE6D9BAD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F1184F257766B0C94A8C7F594C5A3B8",
+      "patient_id": "1F1184F257766B0C94A8C7F594C5A3B8",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F1184F257766B0C94A8C7F594C5A3B8"
+    },
+    {
+      "case_id": "2024-08-2211-NieJunE",
+      "patient_id": "2024-08-2211-NieJunE",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-08-2211-NieJunE"
+    },
+    {
+      "case_id": "1F0A70FF786E616AAD8DEFC684EEBD69",
+      "patient_id": "1F0A70FF786E616AAD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A70FF786E616AAD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "ZHANG_MING_CHAO",
+      "patient_id": "ZHANG_MING_CHAO",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/ZHANG_MING_CHAO"
+    },
+    {
+      "case_id": "2024-10-2510-XiaLu",
+      "patient_id": "2024-10-2510-XiaLu",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-10-2510-XiaLu"
+    },
+    {
+      "case_id": "1F0A7120A2FF6EF9AD8DEFC684EEBD69",
+      "patient_id": "1F0A7120A2FF6EF9AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A7120A2FF6EF9AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "2024071209LiuHaiJuan",
+      "patient_id": "2024071209LiuHaiJuan",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024071209LiuHaiJuan"
+    },
+    {
+      "case_id": "2024061809ZhouHanXin",
+      "patient_id": "2024061809ZhouHanXin",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024061809ZhouHanXin"
+    },
+    {
+      "case_id": "1F09752F52926E88A7A7F99C78DC0A4C",
+      "patient_id": "1F09752F52926E88A7A7F99C78DC0A4C",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F09752F52926E88A7A7F99C78DC0A4C"
+    },
+    {
+      "case_id": "2024072909YongFuCai",
+      "patient_id": "2024072909YongFuCai",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024072909YongFuCai"
+    },
+    {
+      "case_id": "2025-03-0413-HeMei",
+      "patient_id": "2025-03-0413-HeMei",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2025-03-0413-HeMei"
+    },
+    {
+      "case_id": "2504251107121637_ZHANG_FENG_YONG",
+      "patient_id": "2504251107121637_ZHANG_FENG_YONG",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2504251107121637_ZHANG_FENG_YONG"
+    },
+    {
+      "case_id": "1F0A725E7CB36A43AD8DEFC684EEBD69",
+      "patient_id": "1F0A725E7CB36A43AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A725E7CB36A43AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "2025-02-1108-ZhouWeirong",
+      "patient_id": "2025-02-1108-ZhouWeirong",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2025-02-1108-ZhouWeirong"
+    },
+    {
+      "case_id": "1F0A71DBC2FC6690AD8DEFC684EEBD69",
+      "patient_id": "1F0A71DBC2FC6690AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A71DBC2FC6690AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F0A804C55FA6F0A9A395D57CC7AC485",
+      "patient_id": "1F0A804C55FA6F0A9A395D57CC7AC485",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A804C55FA6F0A9A395D57CC7AC485"
+    },
+    {
+      "case_id": "1F0A807CB2A7637E9A395D57CC7AC485",
+      "patient_id": "1F0A807CB2A7637E9A395D57CC7AC485",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A807CB2A7637E9A395D57CC7AC485"
+    },
+    {
+      "case_id": "1F0A70FF58616D7FAD8DEFC684EEBD69",
+      "patient_id": "1F0A70FF58616D7FAD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A70FF58616D7FAD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F0A806A43E065F99A395D57CC7AC485",
+      "patient_id": "1F0A806A43E065F99A395D57CC7AC485",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A806A43E065F99A395D57CC7AC485"
+    },
+    {
+      "case_id": "2024071510ZhengJianZhou",
+      "patient_id": "2024071510ZhengJianZhou",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024071510ZhengJianZhou"
+    },
+    {
+      "case_id": "2024-08-1210-CaoXueYing",
+      "patient_id": "2024-08-1210-CaoXueYing",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-08-1210-CaoXueYing"
+    },
+    {
+      "case_id": "LIAN_JIN_LAI",
+      "patient_id": "LIAN_JIN_LAI",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/LIAN_JIN_LAI"
+    },
+    {
+      "case_id": "DENG_HUA_XIU",
+      "patient_id": "DENG_HUA_XIU",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/DENG_HUA_XIU"
+    },
+    {
+      "case_id": "1F0A703F05E56FE6AD8DEFC684EEBD69",
+      "patient_id": "1F0A703F05E56FE6AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A703F05E56FE6AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "WANG_JI_GUO",
+      "patient_id": "WANG_JI_GUO",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/WANG_JI_GUO"
+    },
+    {
+      "case_id": "1F0A4BC635EE65DEA602335355A2FDEE",
+      "patient_id": "1F0A4BC635EE65DEA602335355A2FDEE",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A4BC635EE65DEA602335355A2FDEE"
+    },
+    {
+      "case_id": "1F0A728C87E96A6DAD8DEFC684EEBD69",
+      "patient_id": "1F0A728C87E96A6DAD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A728C87E96A6DAD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F0A720C67CF6E05AD8DEFC684EEBD69",
+      "patient_id": "1F0A720C67CF6E05AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A720C67CF6E05AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "2025-01-2108-XieYuxiang",
+      "patient_id": "2025-01-2108-XieYuxiang",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2025-01-2108-XieYuxiang"
+    },
+    {
+      "case_id": "1F07F09376366D6DBEE93FB6E08EA610",
+      "patient_id": "1F07F09376366D6DBEE93FB6E08EA610",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F07F09376366D6DBEE93FB6E08EA610"
+    },
+    {
+      "case_id": "1F09539C2A2962C0A7A7F99C78DC0A4C",
+      "patient_id": "1F09539C2A2962C0A7A7F99C78DC0A4C",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F09539C2A2962C0A7A7F99C78DC0A4C"
+    },
+    {
+      "case_id": "2504281115534889_LIU_LI",
+      "patient_id": "2504281115534889_LIU_LI",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2504281115534889_LIU_LI"
+    },
+    {
+      "case_id": "1F0A719C2D5E6BC5AD8DEFC684EEBD69",
+      "patient_id": "1F0A719C2D5E6BC5AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A719C2D5E6BC5AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "2024-12-2009-WuJuan",
+      "patient_id": "2024-12-2009-WuJuan",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-12-2009-WuJuan"
+    },
+    {
+      "case_id": "1F0A805F5FCA6A539A395D57CC7AC485",
+      "patient_id": "1F0A805F5FCA6A539A395D57CC7AC485",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A805F5FCA6A539A395D57CC7AC485"
+    },
+    {
+      "case_id": "2024062708LiCongYu",
+      "patient_id": "2024062708LiCongYu",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024062708LiCongYu"
+    },
+    {
+      "case_id": "2024070510NieChunMei",
+      "patient_id": "2024070510NieChunMei",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024070510NieChunMei"
+    },
+    {
+      "case_id": "1F0A7F1F0527648E8DCBF7E3FADA4C1B",
+      "patient_id": "1F0A7F1F0527648E8DCBF7E3FADA4C1B",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A7F1F0527648E8DCBF7E3FADA4C1B"
+    },
+    {
+      "case_id": "2024-11-2808-LuoJunqi",
+      "patient_id": "2024-11-2808-LuoJunqi",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-11-2808-LuoJunqi"
+    },
+    {
+      "case_id": "1F0A3F61DAAB6860A602335355A2FDEE",
+      "patient_id": "1F0A3F61DAAB6860A602335355A2FDEE",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A3F61DAAB6860A602335355A2FDEE"
+    },
+    {
+      "case_id": "1F11775A4CA66C2194A8C7F594C5A3B8",
+      "patient_id": "1F11775A4CA66C2194A8C7F594C5A3B8",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F11775A4CA66C2194A8C7F594C5A3B8"
+    },
+    {
+      "case_id": "1F0A70A50BA96ACAAD8DEFC684EEBD69",
+      "patient_id": "1F0A70A50BA96ACAAD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A70A50BA96ACAAD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "2024-10-2913-LinZhongHua",
+      "patient_id": "2024-10-2913-LinZhongHua",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-10-2913-LinZhongHua"
+    },
+    {
+      "case_id": "2024-08-2108-LiuSiJin",
+      "patient_id": "2024-08-2108-LiuSiJin",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-08-2108-LiuSiJin"
+    },
+    {
+      "case_id": "1F07CCAAA1306F1FBEE93FB6E08EA610",
+      "patient_id": "1F07CCAAA1306F1FBEE93FB6E08EA610",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F07CCAAA1306F1FBEE93FB6E08EA610"
+    },
+    {
+      "case_id": "1F0A725DAEFB6C03AD8DEFC684EEBD69",
+      "patient_id": "1F0A725DAEFB6C03AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A725DAEFB6C03AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "2024061409ZhangBiZhu",
+      "patient_id": "2024061409ZhangBiZhu",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024061409ZhangBiZhu"
+    },
+    {
+      "case_id": "1F0A8001F34669DB936F7D8734597EAF",
+      "patient_id": "1F0A8001F34669DB936F7D8734597EAF",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A8001F34669DB936F7D8734597EAF"
+    },
+    {
+      "case_id": "1F0A805EA10668729A395D57CC7AC485",
+      "patient_id": "1F0A805EA10668729A395D57CC7AC485",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A805EA10668729A395D57CC7AC485"
+    },
+    {
+      "case_id": "1F0A70336B6168D1AD8DEFC684EEBD69",
+      "patient_id": "1F0A70336B6168D1AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A70336B6168D1AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F1185A56AD162C094A8C7F594C5A3B8",
+      "patient_id": "1F1185A56AD162C094A8C7F594C5A3B8",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F1185A56AD162C094A8C7F594C5A3B8"
+    },
+    {
+      "case_id": "1F0A7029BC94614EAD8DEFC684EEBD69",
+      "patient_id": "1F0A7029BC94614EAD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A7029BC94614EAD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "XU_WEI_XIAN",
+      "patient_id": "XU_WEI_XIAN",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/XU_WEI_XIAN"
+    },
+    {
+      "case_id": "1F0A7FFAE5146E3E936F7D8734597EAF",
+      "patient_id": "1F0A7FFAE5146E3E936F7D8734597EAF",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A7FFAE5146E3E936F7D8734597EAF"
+    },
+    {
+      "case_id": "1F0A71EE2F1B6B5DAD8DEFC684EEBD69",
+      "patient_id": "1F0A71EE2F1B6B5DAD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A71EE2F1B6B5DAD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F0A70E6A99A6D8CAD8DEFC684EEBD69",
+      "patient_id": "1F0A70E6A99A6D8CAD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A70E6A99A6D8CAD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "LIU_FU_CHENG",
+      "patient_id": "LIU_FU_CHENG",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/LIU_FU_CHENG"
+    },
+    {
+      "case_id": "1F0A7FFE67716574936F7D8734597EAF",
+      "patient_id": "1F0A7FFE67716574936F7D8734597EAF",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A7FFE67716574936F7D8734597EAF"
+    },
+    {
+      "case_id": "1F141F00C8D8605AA50EAB207AED7404",
+      "patient_id": "1F141F00C8D8605AA50EAB207AED7404",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F141F00C8D8605AA50EAB207AED7404"
+    },
+    {
+      "case_id": "2504220948152795_HUANG_MAO_XIN",
+      "patient_id": "2504220948152795_HUANG_MAO_XIN",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2504220948152795_HUANG_MAO_XIN"
+    },
+    {
+      "case_id": "1F0A70EC0AE76113AD8DEFC684EEBD69",
+      "patient_id": "1F0A70EC0AE76113AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A70EC0AE76113AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F0565138FFC624D80E83F1592CACC6D",
+      "patient_id": "1F0565138FFC624D80E83F1592CACC6D",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0565138FFC624D80E83F1592CACC6D"
+    },
+    {
+      "case_id": "1F0A7272B3116AEFAD8DEFC684EEBD69",
+      "patient_id": "1F0A7272B3116AEFAD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A7272B3116AEFAD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "2024060409ChenCiSai_\u672a\u89c1\u5f02\u5e38",
+      "patient_id": "2024060409ChenCiSai_\u672a\u89c1\u5f02\u5e38",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024060409ChenCiSai_\u672a\u89c1\u5f02\u5e38"
+    },
+    {
+      "case_id": "2024-08-0709-TangGuiXiu",
+      "patient_id": "2024-08-0709-TangGuiXiu",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-08-0709-TangGuiXiu"
+    },
+    {
+      "case_id": "1F0A7208D7CE6C84AD8DEFC684EEBD69",
+      "patient_id": "1F0A7208D7CE6C84AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A7208D7CE6C84AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F1405B77A8D6609A50EAB207AED7404",
+      "patient_id": "1F1405B77A8D6609A50EAB207AED7404",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F1405B77A8D6609A50EAB207AED7404"
+    },
+    {
+      "case_id": "XIe_XUE_PING",
+      "patient_id": "XIe_XUE_PING",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/XIe_XUE_PING"
+    },
+    {
+      "case_id": "2504250837387017_LU_XIAO_HONG",
+      "patient_id": "2504250837387017_LU_XIAO_HONG",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2504250837387017_LU_XIAO_HONG"
+    },
+    {
+      "case_id": "2024073008JiTaiHua",
+      "patient_id": "2024073008JiTaiHua",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024073008JiTaiHua"
+    },
+    {
+      "case_id": "2505161049561683_CHEN_YI_XIN",
+      "patient_id": "2505161049561683_CHEN_YI_XIN",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2505161049561683_CHEN_YI_XIN"
+    },
+    {
+      "case_id": "1F0A71ABBACD63FAAD8DEFC684EEBD69",
+      "patient_id": "1F0A71ABBACD63FAAD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A71ABBACD63FAAD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "2024-12-1010-WangHongzhi",
+      "patient_id": "2024-12-1010-WangHongzhi",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-12-1010-WangHongzhi"
+    },
+    {
+      "case_id": "1F06CEFCF82860A1BEE93FB6E08EA610",
+      "patient_id": "1F06CEFCF82860A1BEE93FB6E08EA610",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F06CEFCF82860A1BEE93FB6E08EA610"
+    },
+    {
+      "case_id": "2024061309NieJiuLin",
+      "patient_id": "2024061309NieJiuLin",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024061309NieJiuLin"
+    },
+    {
+      "case_id": "2024-09-2010-ChenYueHong",
+      "patient_id": "2024-09-2010-ChenYueHong",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-09-2010-ChenYueHong"
+    },
+    {
+      "case_id": "1F0A721792CD6037AD8DEFC684EEBD69",
+      "patient_id": "1F0A721792CD6037AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A721792CD6037AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F0A71F904A26AE2AD8DEFC684EEBD69",
+      "patient_id": "1F0A71F904A26AE2AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A71F904A26AE2AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F0A7030B15C624AAD8DEFC684EEBD69",
+      "patient_id": "1F0A7030B15C624AAD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A7030B15C624AAD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F070CDF73356221BEE93FB6E08EA610",
+      "patient_id": "1F070CDF73356221BEE93FB6E08EA610",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F070CDF73356221BEE93FB6E08EA610"
+    },
+    {
+      "case_id": "1F07331F1D2A629EBEE93FB6E08EA610",
+      "patient_id": "1F07331F1D2A629EBEE93FB6E08EA610",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F07331F1D2A629EBEE93FB6E08EA610"
+    },
+    {
+      "case_id": "1F141E3CDDD06783A50EAB207AED7404",
+      "patient_id": "1F141E3CDDD06783A50EAB207AED7404",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F141E3CDDD06783A50EAB207AED7404"
+    },
+    {
+      "case_id": "2024060508YouZhongYi",
+      "patient_id": "2024060508YouZhongYi",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024060508YouZhongYi"
+    },
+    {
+      "case_id": "1F0A700FDAF7603EAD8DEFC684EEBD69",
+      "patient_id": "1F0A700FDAF7603EAD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A700FDAF7603EAD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "2024-11-1910-HuangXiurong",
+      "patient_id": "2024-11-1910-HuangXiurong",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024-11-1910-HuangXiurong"
+    },
+    {
+      "case_id": "2025-02-2108-HuangMeixiang",
+      "patient_id": "2025-02-2108-HuangMeixiang",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2025-02-2108-HuangMeixiang"
+    },
+    {
+      "case_id": "1F0A7046C0C66876AD8DEFC684EEBD69",
+      "patient_id": "1F0A7046C0C66876AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A7046C0C66876AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "WANG_XIAO_YANG",
+      "patient_id": "WANG_XIAO_YANG",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/WANG_XIAO_YANG"
+    },
+    {
+      "case_id": "1F0A70D40B236BCEAD8DEFC684EEBD69",
+      "patient_id": "1F0A70D40B236BCEAD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A70D40B236BCEAD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F0A720B2CD268B3AD8DEFC684EEBD69",
+      "patient_id": "1F0A720B2CD268B3AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A720B2CD268B3AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F0A72328A436051AD8DEFC684EEBD69",
+      "patient_id": "1F0A72328A436051AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A72328A436051AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "1F0A726FDAF7614FAD8DEFC684EEBD69",
+      "patient_id": "1F0A726FDAF7614FAD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A726FDAF7614FAD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "YANG_CHANG_XIAN",
+      "patient_id": "YANG_CHANG_XIAN",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/YANG_CHANG_XIAN"
+    },
+    {
+      "case_id": "1F06C1943ADF6DEDBEE93FB6E08EA610",
+      "patient_id": "1F06C1943ADF6DEDBEE93FB6E08EA610",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F06C1943ADF6DEDBEE93FB6E08EA610"
+    },
+    {
+      "case_id": "1F0A7059EBD26473AD8DEFC684EEBD69",
+      "patient_id": "1F0A7059EBD26473AD8DEFC684EEBD69",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/1F0A7059EBD26473AD8DEFC684EEBD69"
+    },
+    {
+      "case_id": "2024071709LiGuoAn",
+      "patient_id": "2024071709LiGuoAn",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/GE/nii/2024071709LiGuoAn"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+Scanner Platform,Collimator,Projections / Angles,Training Set (Cases),Validation Set (Cases),Held-out Test Set (Cases),Total Patients
+GE Discovery 670 Pro,Low-Energy High-Resolution (LEHR),60 (30 per head),1221,152,154,1527
+Siemens Symbia,SY-LEHR,64 (32 per head),185,25,25,235
+Total Clinical Cohort,High-Resolution Dual Head,Multi-view SPECT,1406,177,179,1762

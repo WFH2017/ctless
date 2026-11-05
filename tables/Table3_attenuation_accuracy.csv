@@ -1,0 +1,4 @@
+Scanner Cohort,"Mu PSNR (GE Standard, dB)",Supported Bone MAE (cm⁻¹),Soft Tissue MAE (cm⁻¹),Lung Low-Attenuation MAE (cm⁻¹),Whole Body Mu RMSE (cm⁻¹)
+GE Discovery 670 Pro (Held-out Test),21.20 ± 1.82,0.0225 ± 0.0035,0.0196 ± 0.0021,0.0284 ± 0.0031,0.0248 ± 0.0040
+"Siemens Symbia (Held-out Test, n=25)",23.89 ± 1.53,0.0380 ± 0.0068,0.0211 ± 0.0023,0.0249 ± 0.0035,0.0227 ± 0.0044
+Two-Vendor Combined Cohort,22.05 ± 1.75,0.0245 ± 0.0055,0.0201 ± 0.0022,0.0279 ± 0.0033,0.0245 ± 0.0041

@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyTorch checkpoints and large binaries (> 100 MB disallowed by GitHub)
+*.pt
+*.pth
+*.ckpt
+sample_inference_*.pt
+
+# Training runs, logs, checkpoints, outputs
+experiments_*/
+*.log
+*.pid
+runs/
+
+# Large datasets and caches
+data
+data/
+raw_data
+raw_data/
+*.nii
+*.nii.gz
+*.dcm
+*.dicom
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store

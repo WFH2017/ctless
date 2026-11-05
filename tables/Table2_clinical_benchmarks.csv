@@ -1,0 +1,6 @@
+Method / Paradigm,Activity PSNR (dB),Activity SSIM,Activity NMSE,Pearson r,Hotspot Max Bias (%)
+1. CT-less NAC (No Attenuation Correction),36.47 ± 4.47,0.9641 ± 0.0144,0.6395 ± 0.0957,0.9369 ± 0.0231,-70.2% ± 5.8%
+2. Uniform Chang AC (μ = 0.153 cm⁻¹),39.12 ± 3.85,0.9702 ± 0.0120,0.4120 ± 0.0750,0.9520 ± 0.0195,-28.5% ± 4.2%
+3. Decoupled PU-MAENet (Downstream OSEM),42.15 ± 3.20,0.9815 ± 0.0085,0.1520 ± 0.0410,0.9710 ± 0.0140,-6.8% ± 3.1%
+4. Proposed EndToEndPhysicsUnrollSPECTNet,**49.52 ± 5.17**,**0.9864 ± 0.0097**,**0.0391 ± 0.0442**,**0.9817 ± 0.0197**,**-0.4% ± 2.1%**
+5. Gold-Standard True CT-AC (Reference),Reference (∞),Reference (1.000),0.0000,1.0000,0.0%

@@ -1,0 +1,157 @@
+{
+  "split": "siemens_nii_test",
+  "vendor": "SIEMENS NM",
+  "num_cases": 25,
+  "cases": [
+    {
+      "case_id": "301513349",
+      "patient_id": "301513349",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/301513349"
+    },
+    {
+      "case_id": "611486782",
+      "patient_id": "611486782",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/611486782"
+    },
+    {
+      "case_id": "301539147",
+      "patient_id": "301539147",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/301539147"
+    },
+    {
+      "case_id": "301415729",
+      "patient_id": "301415729",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/301415729"
+    },
+    {
+      "case_id": "300295201",
+      "patient_id": "300295201",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/300295201"
+    },
+    {
+      "case_id": "300210121",
+      "patient_id": "300210121",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/300210121"
+    },
+    {
+      "case_id": "001258172",
+      "patient_id": "001258172",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/001258172"
+    },
+    {
+      "case_id": "000281264",
+      "patient_id": "000281264",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/000281264"
+    },
+    {
+      "case_id": "000355074",
+      "patient_id": "000355074",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/000355074"
+    },
+    {
+      "case_id": "301291228",
+      "patient_id": "301291228",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/301291228"
+    },
+    {
+      "case_id": "301529564",
+      "patient_id": "301529564",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/301529564"
+    },
+    {
+      "case_id": "001233888",
+      "patient_id": "001233888",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/001233888"
+    },
+    {
+      "case_id": "301509219",
+      "patient_id": "301509219",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/301509219"
+    },
+    {
+      "case_id": "611477272",
+      "patient_id": "611477272",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/611477272"
+    },
+    {
+      "case_id": "600779485",
+      "patient_id": "600779485",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/600779485"
+    },
+    {
+      "case_id": "001660737",
+      "patient_id": "001660737",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/001660737"
+    },
+    {
+      "case_id": "601195645",
+      "patient_id": "601195645",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/601195645"
+    },
+    {
+      "case_id": "002327001",
+      "patient_id": "002327001",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/002327001"
+    },
+    {
+      "case_id": "300281888",
+      "patient_id": "300281888",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/300281888"
+    },
+    {
+      "case_id": "300372361",
+      "patient_id": "300372361",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/300372361"
+    },
+    {
+      "case_id": "300526749",
+      "patient_id": "300526749",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/300526749"
+    },
+    {
+      "case_id": "601219807",
+      "patient_id": "601219807",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/601219807"
+    },
+    {
+      "case_id": "000270408",
+      "patient_id": "000270408",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/000270408"
+    },
+    {
+      "case_id": "001758134",
+      "patient_id": "001758134",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/001758134"
+    },
+    {
+      "case_id": "301554524",
+      "patient_id": "301554524",
+      "vendor": "SIEMENS NM",
+      "case_dir": "/home/wengfenghua/workspace/SparseSPECT/data/Siemens/nii/301554524"
+    }
+  ]
+}
