@@ -30,7 +30,7 @@ worker_cmd = (
     f"--weight-decay 1e-4 "
     f"--grad-accum-steps 4 "
     f"--num-workers 4 "
-    f"--projector-type pytomography "
+    f"--projector-type nmrecon "
     f"--poisson-weight 0.001 "
     f"--output-dir {EXP_DIR} "
     f">> {LOG_FILE} 2>&1 & echo $!"

@@ -26,6 +26,9 @@ from skimage.metrics import structural_similarity as ssim
 CTLESS_DIR = '/home/wengfenghua/workspace/SparseSPECT/ctless'
 SPLITS_DIR = os.path.join(CTLESS_DIR, 'splits_ge_nii')
 NEW1022_PATH = '/home/wengfenghua/sparseSPECT/0913ctless'
+LOCAL_DIR = os.path.dirname(os.path.abspath(__file__))
+if LOCAL_DIR not in sys.path:
+    sys.path.insert(0, LOCAL_DIR)
 if CTLESS_DIR not in sys.path:
     sys.path.insert(0, CTLESS_DIR)
 if NEW1022_PATH not in sys.path:
@@ -35,7 +38,11 @@ from models.true_unroll_spect import (
     EndToEndPhysicsUnrollSPECTNet,
     TrueEndToEndSPECTLoss
 )
-from new1022.model import projector_from_batch
+from new1022.model import projector_from_batch as pytomography_projector_from_batch
+try:
+    from nmrecon_training_projector import projector_from_batch as nmrecon_projector_from_batch
+except ImportError:
+    nmrecon_projector_from_batch = None
 
 
 class GENiiFullUnrollDataset(Dataset):
@@ -182,6 +189,7 @@ def parse_args():
     parser.add_argument("--gpu-id", type=int, default=0, help="GPU index to use")
     parser.add_argument("--num-workers", type=int, default=4, help="DataLoader workers")
     parser.add_argument("--poisson_weight", "--poisson-weight", type=float, default=1e-3, help="Physical Poisson projection loss weight")
+    parser.add_argument("--projector_type", "--projector-type", type=str, default="nmrecon", choices=["nmrecon", "pytomography"], help="Physics projector backend")
     parser.add_argument("--output-dir", type=str, default=os.path.join(CTLESS_DIR, "experiments_true_unroll_ge_nii"))
     parser.add_argument("--cache-dir", type=str, default=os.path.join(CTLESS_DIR, "data", "cache_ge_nii"))
     parser.add_argument("--pretrained-mu-ckpt", type=str,
@@ -275,6 +283,13 @@ def main():
         atten_weight=5.0,
         poisson_weight=args.poisson_weight
     ).to(device)
+    if args.projector_type == "nmrecon":
+        if nmrecon_projector_from_batch is None:
+            raise RuntimeError("Requested nmrecon projector backend, but failed to import nmrecon_training_projector!")
+        projector_fn = nmrecon_projector_from_batch
+    else:
+        projector_fn = pytomography_projector_from_batch
+    log_print(f"物理投影算子后端: {args.projector_type} ({projector_fn.__module__ if hasattr(projector_fn, '__module__') else 'custom'})")
     log_print(f"泊松投影损失权重 (poisson_weight): {args.poisson_weight}")
 
     optimizer = AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
@@ -310,7 +325,7 @@ def main():
             support_mask = batch['support_mask'].to(device)
 
             # Per-patient geometry projector
-            projector = projector_from_batch(batch, str(device))
+            projector = projector_fn(batch, str(device))
 
             # Forward pass with checkpointing
             out = model(
@@ -339,13 +354,13 @@ def main():
 
             # 防假死梯度有效性核验 (Step 1 打印一次)
             if step == 1 and epoch == start_epoch:
-                mu_grad = next(model.mu_nets[0].parameters()).grad
-                act_grad = next(model.act_nets[0].parameters()).grad
-                mu_norm = mu_grad.abs().mean().item() if mu_grad is not None else None
-                act_norm = act_grad.abs().mean().item() if act_grad is not None else None
+                mu_grads = [p.grad.abs().mean().item() for net in model.mu_nets for p in net.parameters() if p.grad is not None]
+                act_grads = [p.grad.abs().mean().item() for net in model.act_nets for p in net.parameters() if p.grad is not None]
+                mu_norm = (sum(mu_grads) / len(mu_grads)) if mu_grads else None
+                act_norm = (sum(act_grads) / len(act_grads)) if act_grads else None
                 log_print("=" * 60)
-                log_print(f"Check Grad -> mu_net: {mu_norm}")
-                log_print(f"Check Grad -> act_net: {act_norm}")
+                log_print(f"Check Grad -> mu_net: {mu_norm} ({len(mu_grads)} params with grad)")
+                log_print(f"Check Grad -> act_net: {act_norm} ({len(act_grads)} params with grad)")
                 log_print("=" * 60)
 
             train_loss_sum += loss.item() * args.grad_accum_steps
@@ -398,7 +413,7 @@ def main():
                 v_scatter = v_batch['scatter_est'].to(device)
                 v_cond = v_batch['cond'].to(device)
 
-                v_projector = projector_from_batch(v_batch, str(device))
+                v_projector = projector_fn(v_batch, str(device))
                 v_out = model(
                     lam_init_p=v_lam_p,
                     lam_init_s=v_lam_s,

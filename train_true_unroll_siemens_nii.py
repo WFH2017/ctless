@@ -24,6 +24,9 @@ from torch.optim.lr_scheduler import CosineAnnealingLR
 from skimage.metrics import structural_similarity as ssim
 
 # Setup workspace paths
+LOCAL_DIR = os.path.dirname(os.path.abspath(__file__))
+if LOCAL_DIR not in sys.path:
+    sys.path.insert(0, LOCAL_DIR)
 CTLESS_DIR = "/home/wengfenghua/workspace/SparseSPECT/ctless"
 SPARSESPECT_DIR = "/home/wengfenghua/sparseSPECT/0913ctless"
 if CTLESS_DIR not in sys.path:
@@ -198,7 +201,7 @@ def parse_args():
     parser.add_argument("--gpu-id", type=int, default=0, help="GPU index to use")
     parser.add_argument("--num-workers", type=int, default=4, help="DataLoader workers")
     parser.add_argument("--poisson_weight", "--poisson-weight", type=float, default=1e-3, help="Physical Poisson projection loss weight")
-    parser.add_argument("--projector_type", "--projector-type", type=str, default="pytomography", choices=["pytomography", "nmrecon"], help="Physics projector backend")
+    parser.add_argument("--projector_type", "--projector-type", type=str, default="nmrecon", choices=["nmrecon", "pytomography"], help="Physics projector backend")
     parser.add_argument("--output-dir", type=str, default=os.path.join(CTLESS_DIR, "experiments_true_unroll_siemens_nii"))
     parser.add_argument("--cache-dir", type=str, default=os.path.join(CTLESS_DIR, "data", "cache_siemens_nii"))
     parser.add_argument("--pretrained-mu-ckpt", type=str,
@@ -286,7 +289,12 @@ def main():
         log_print(f"Successfully loaded {len(matched)} / {len(model_dict)} pretrained weights (DualWindowMuInitNet + MuProxNet).")
         log_print("AdaptiveScaleActivityResUNet3D initialized with exact zero-init on conv_out (Physical OSEM identity mapping).")
 
-    projector_fn = nmrecon_projector_from_batch if (args.projector_type == "nmrecon" and nmrecon_projector_from_batch is not None) else pytomography_projector_from_batch
+    if args.projector_type == "nmrecon":
+        if nmrecon_projector_from_batch is None:
+            raise RuntimeError("Requested nmrecon projector backend, but failed to import nmrecon_training_projector!")
+        projector_fn = nmrecon_projector_from_batch
+    else:
+        projector_fn = pytomography_projector_from_batch
     log_print(f"物理投影算子后端: {args.projector_type} ({projector_fn.__module__ if hasattr(projector_fn, '__module__') else 'custom'})")
     log_print(f"泊松投影损失权重 (poisson_weight): {args.poisson_weight}")
 
@@ -361,13 +369,13 @@ def main():
 
             # 防假死梯度有效性核验 (Step 1 打印一次)
             if step == 1 and epoch == start_epoch:
-                mu_grad = next(model.mu_nets[0].parameters()).grad
-                act_grad = next(model.act_nets[0].parameters()).grad
-                mu_norm = mu_grad.abs().mean().item() if mu_grad is not None else None
-                act_norm = act_grad.abs().mean().item() if act_grad is not None else None
+                mu_grads = [p.grad.abs().mean().item() for net in model.mu_nets for p in net.parameters() if p.grad is not None]
+                act_grads = [p.grad.abs().mean().item() for net in model.act_nets for p in net.parameters() if p.grad is not None]
+                mu_norm = (sum(mu_grads) / len(mu_grads)) if mu_grads else None
+                act_norm = (sum(act_grads) / len(act_grads)) if act_grads else None
                 log_print("=" * 60)
-                log_print(f"Check Grad -> mu_net: {mu_norm}")
-                log_print(f"Check Grad -> act_net: {act_norm}")
+                log_print(f"Check Grad -> mu_net: {mu_norm} ({len(mu_grads)} params with grad)")
+                log_print(f"Check Grad -> act_net: {act_norm} ({len(act_grads)} params with grad)")
                 log_print("=" * 60)
 
             train_loss_sum += loss.item() * args.grad_accum_steps
