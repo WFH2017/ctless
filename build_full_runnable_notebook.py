@@ -48,6 +48,7 @@ cells.append({
     "metadata": {},
     "outputs": [],
     "source": [
+        "%matplotlib inline\n",
         "import os\n",
         "import sys\n",
         "import json\n",
@@ -57,7 +58,7 @@ cells.append({
         "import numpy as np\n",
         "import matplotlib\n",
         "import matplotlib.pyplot as plt\n",
-        "%matplotlib inline\n",
+        "from IPython.display import display, Image\n",
         "matplotlib.rcParams['figure.dpi'] = 140\n",
         "from skimage.metrics import structural_similarity as ssim\n",
         "\n",
@@ -322,8 +323,10 @@ cells.append({
         "plt.suptitle(f'Multi-Stage Activity Evolution for Patient {PATIENT_ID}', fontsize=16, fontweight='bold', y=0.94)\n",
         "fig_dir = WORKSPACE / 'figures'\n",
         "fig_dir.mkdir(parents=True, exist_ok=True)\n",
-        "fig.savefig(fig_dir / f'Figure1_activity_{PATIENT_ID}.png', bbox_inches='tight', dpi=140)\n",
-        "plt.show()"
+        "fig_path1 = fig_dir / f'Figure1_activity_{PATIENT_ID}.png'\n",
+        "fig.savefig(fig_path1, bbox_inches='tight', dpi=140)\n",
+        "plt.close(fig)\n",
+        "display(Image(filename=str(fig_path1)))"
     ]
 })
 
@@ -382,8 +385,10 @@ cells.append({
         "cb_mu_err = fig2.colorbar(im2, cax=cbar_ax_mu_err)\n",
         "cb_mu_err.set_label('μ Error (cm⁻¹)', fontsize=11, fontweight='bold')\n",
         "plt.suptitle(f'Multi-Stage Attenuation (μ) Map Evolution for Patient {PATIENT_ID}', fontsize=16, fontweight='bold', y=0.94)\n",
-        "fig2.savefig(fig_dir / f'Figure2_attenuation_{PATIENT_ID}.png', bbox_inches='tight', dpi=140)\n",
-        "plt.show()"
+        "fig_path2 = fig_dir / f'Figure2_attenuation_{PATIENT_ID}.png'\n",
+        "fig2.savefig(fig_path2, bbox_inches='tight', dpi=140)\n",
+        "plt.close(fig2)\n",
+        "display(Image(filename=str(fig_path2)))"
     ]
 })
 
@@ -417,8 +422,10 @@ cells.append({
         "plt.grid(True, linestyle='--', alpha=0.5)\n",
         "plt.legend(frameon=True, fontsize=10, loc='upper right')\n",
         "plt.tight_layout()\n",
-        "plt.savefig(fig_dir / f'Figure3_line_profile_{PATIENT_ID}.png', bbox_inches='tight', dpi=140)\n",
-        "plt.show()"
+        "fig_path3 = fig_dir / f'Figure3_line_profile_{PATIENT_ID}.png'\n",
+        "plt.savefig(fig_path3, bbox_inches='tight', dpi=140)\n",
+        "plt.close()\n",
+        "display(Image(filename=str(fig_path3)))"
     ]
 })
 
@@ -460,8 +467,10 @@ cells.append({
         "    ax4c.text(i, v + 0.0001, f'{v:.4f}', ha='center', fontsize=9, fontweight='bold')\n",
         "\n",
         "plt.tight_layout()\n",
-        "fig4.savefig(fig_dir / f'Figure4_convergence_{PATIENT_ID}.png', bbox_inches='tight', dpi=140)\n",
-        "plt.show()"
+        "fig_path4 = fig_dir / f'Figure4_convergence_{PATIENT_ID}.png'\n",
+        "fig4.savefig(fig_path4, bbox_inches='tight', dpi=140)\n",
+        "plt.close(fig4)\n",
+        "display(Image(filename=str(fig_path4)))"
     ]
 })
 
@@ -474,22 +483,25 @@ cells.append({
     "metadata": {},
     "outputs": [],
     "source": [
-        "def browse_slices(z=z_lesion):\n",
+        "def show_slice(z):\n",
         "    fig, axes = plt.subplots(1, 7, figsize=(22, 3.5), dpi=120)\n",
         "    for ax, vol, title in zip(axes, stages_x, titles_x):\n",
         "        ax.imshow(vol[z], cmap='magma', vmin=0, vmax=vmax_act, origin='lower')\n",
         "        ax.set_title(title, fontsize=10, fontweight='bold')\n",
         "        ax.axis('off')\n",
         "    plt.suptitle(f'Axial Cross-Section at z = {z}', fontsize=13, fontweight='bold')\n",
-        "    plt.show()\n",
+        "    slice_path = fig_dir / f'Figure5_axial_slice_z{z}_{PATIENT_ID}.png'\n",
+        "    fig.savefig(slice_path, bbox_inches='tight', dpi=120)\n",
+        "    plt.close(fig)\n",
+        "    display(Image(filename=str(slice_path)))\n",
         "\n",
-        "try:\n",
-        "    import ipywidgets as widgets\n",
-        "    # Drag the slider to inspect any axial slice across all stages in real-time!\n",
-        "    widgets.interact(browse_slices, z=widgets.IntSlider(min=0, max=127, step=1, value=z_lesion))\n",
-        "except Exception as e:\n",
-        "    print(f'Note: Interactive slider disabled in batch export mode ({e}). Showing lesion slice:')\n",
-        "    browse_slices(z=z_lesion)\n"
+        "# Display axial cross-section across all stages at lesion peak slice\n",
+        "print(f'Displaying axial cross-section at lesion peak slice (z = {z_lesion}):')\n",
+        "show_slice(z_lesion)\n",
+        "\n",
+        "# To interactively browse all 128 slices with a slider in Jupyter / VS Code, run:\n",
+        "# import ipywidgets as widgets\n",
+        "# widgets.interact(show_slice, z=widgets.IntSlider(min=0, max=127, step=1, value=z_lesion))"
     ]
 })
 
