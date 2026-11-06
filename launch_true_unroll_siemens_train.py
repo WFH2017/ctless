@@ -9,9 +9,9 @@ import sys
 import argparse
 import subprocess
 
-EXP_DIR = "/home/wengfenghua/workspace/SparseSPECT/ctless/experiments_true_unroll_siemens_nii"
+EXP_DIR = "/home/wengfenghua/workspace/SparseSPECT/ctless-unroll/experiments_true_unroll_siemens_nii"
 PYTHON_BIN = "/home/wengfenghua/anaconda3/envs/hqmira/bin/python"
-SCRIPT = "/home/wengfenghua/workspace/SparseSPECT/ctless/train_true_unroll_siemens_nii.py"
+SCRIPT = "/home/wengfenghua/workspace/SparseSPECT/ctless-unroll/train_true_unroll_siemens_nii.py"
 LOG_FILE = os.path.join(EXP_DIR, "train.log")
 PID_FILE = os.path.join(EXP_DIR, "train.pid")
 

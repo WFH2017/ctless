@@ -7,14 +7,7 @@ from collections import OrderedDict
 from pathlib import Path
 import torch
 
-_local_nm = Path(__file__).resolve().parent / 'nmrecon_autograd'
-_parent_nm = Path(__file__).resolve().parents[1] / 'nmrecon_autograd'
-if _local_nm.exists() and str(_local_nm) not in sys.path:
-    sys.path.insert(0, str(_local_nm))
-elif _parent_nm.exists() and str(_parent_nm) not in sys.path:
-    sys.path.insert(0, str(_parent_nm))
-
-from nmrecon_torch import NMReconDeviceOperator, NMReconFunction
+from nmrecon_autograd.nmrecon_torch import NMReconDeviceOperator, NMReconFunction
 
 _CACHE = OrderedDict()
 

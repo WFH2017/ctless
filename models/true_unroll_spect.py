@@ -1,46 +1,10 @@
 """
-True End-to-End Physics-Unrolled SPECT Reconstruction Network (EndToEndPhysicsUnrollSPECTNet).
-
-Mathematical Formulation:
-  State variables evolved jointly across K unrolled stages:
-    - Activity x_k in R_+^{1 x 128 x 128 x 128} (direct volumetric radioactivity concentration)
-    - Attenuation mu_k in [0.0, 0.35] cm^-1 (volumetric 140 keV linear attenuation)
-
-  Per-stage alternating physics-informed update (Stage k = 1 .. K):
-    1. Damped Physical OSEM Activity Step (memory-efficient; gradients flow via damp and x_curr):
-         fp_eps = 1e-3 * mean(y_sub)   # relative epsilon prevents air-region ratio explosion
-         ratio  = y_sub / (A(mu) x + scatter + fp_eps)
-         x_tilde_k = clamp(x_{k-1} * [1 + 0.5*sigmoid(alpha) * (A^T ratio / A^T 1 - 1)], min=1e-6)
-       - update_ratio clamped to [0.1, 10.0]: eliminates FOV-edge streak and air-voxel divergence
-       - damp = 0.5 * sigmoid(alpha): OSEM step bounded to max 5.5x, alpha is learnable
-       - Gradients flow from loss to alpha and x_curr (OSEM ratio computed in no_grad for memory)
-
-    2. Straight-Through Physics Bridge (Joint Unrolling key technique):
-         fp_mu  = A(mu_curr) x_tilde + scatter   [mu_curr NOT detached]
-         L_phy  = D_Poisson(fp_mu, y_sub)        [in computation graph]
-         Grad bridge: poisson_physics = L_phy_val + (mu_curr - sg(mu_curr)) * sg(grad_L/grad_mu)
-       - Numerically: poisson_physics == L_phy, but dL/d(mu_curr) == local Poisson gradient
-       - This single line enables loss_x -> poisson_physics -> mu_curr -> mu_prox_net(prev stage)
-         i.e. TRUE joint activity-attenuation unrolling through physics!
-
-    3. Learned Attenuation Proximal Operator (3D ResUNet with FiLM):
-         mu_k = Softplus(latent(mu_{k-1}) + mu_prox_net([mu_{k-1}, x_tilde, scatter, grad_mu]))
-
-    4. Learned Activity Proximal Operator (Multi-scale 3D ResUNet, Unbounded Additive Residual):
-         scale = mean(x_tilde)   # patient-specific normalization
-         x_k = clamp(x_tilde + act_prox_net([x_tilde/scale, mu_k, res_bp]) * scale, min=1e-6)
-       - Fully unbounded residual: allows >300% local boost or >95% noise suppression
-       - Zero-initialized conv_out: exact OSEM identity at training step 0
-
-  Initialization (x_0):
-    If x_init_nac provided: apply Chang's first-order attenuation pre-correction before unrolling
-      sens_nac = A^T(mu=0) * 1;  sens_ac = A^T(mu_0) * 1
-      x_0 = x_init_nac * clamp(sens_nac / sens_ac, 1.0, 15.0)   # Chang 1978, ~3-5 dB boost
-    This aligns NAC image physical scale with mu_0 before Stage 1 OSEM, eliminating
-    the factor-10~20 mismatch that would otherwise cause streak artifacts in early stages.
-
-  Final Output:
-    Directly outputs the final reconstructed CT-AC activity x_K and attenuation mu_K!
+CT-less alternating attenuation/activity reconstruction with Path A.
+The native operator treats mu as constant; mu retains learned cross-stage
+connections and tissue supervision. The default NMRecon adapter differentiates
+activity through physical updates. full_projection_step selects the separate
+stop-gradient physical-feature variant. Softplus enforces positivity only.
+Projection supervision uses count-normalized Poisson deviance (without factor 2).
 """
 
 from __future__ import annotations
@@ -54,29 +18,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.checkpoint import checkpoint
 
-# Ensure local and cluster paths in sys.path
-NEW1022_PATH = '/home/wengfenghua/sparseSPECT/0913ctless'
-if os.path.exists(NEW1022_PATH) and NEW1022_PATH not in sys.path:
-    sys.path.insert(0, NEW1022_PATH)
-
-try:
-    from new1022.model import (
-        DualWindowMuInitNet,
-        LightweightCond3DUNet,
-        DeepCond3DUNet,
-        DynamicSubsetProjectorWrapper,
-        _SingleSubsetOp,
-        PhysicsUnrolledMuLoss
-    )
-except ImportError:
-    from .pytomography_support import (
-        DualWindowMuInitNet,
-        LightweightCond3DUNet,
-        DeepCond3DUNet,
-        DynamicSubsetProjectorWrapper,
-        _SingleSubsetOp,
-        PhysicsUnrolledMuLoss
-    )
+from .pytomography_support import (
+    DualWindowMuInitNet, LightweightCond3DUNet, DeepCond3DUNet,
+    DynamicSubsetProjectorWrapper, _SingleSubsetOp, PhysicsUnrolledMuLoss
+)
 
 
 class ResBlock3D(nn.Module):
@@ -213,8 +158,8 @@ class TrueEndToEndUnrollStage(nn.Module):
         net_depth: int = 4
     ):
         super().__init__()
-        # Learnable damping parameter for OSEM step (sigmoid(-2.0) ~ 0.119)
-        self.damping_alpha = nn.Parameter(torch.tensor(-2.0))
+        # Learnable damping parameter for OSEM step (sigmoid(-0.5) ~ 0.3775, damp ~ 0.1887)
+        self.damping_alpha = nn.Parameter(torch.tensor(-0.5))
 
         # Attenuation refinement subnetwork
         if net_depth == 4:
@@ -240,9 +185,15 @@ class TrueEndToEndUnrollStage(nn.Module):
             negative_gradient = projector.backward(y / expected - 1.0, mu_curr.detach())
             direction = negative_gradient / negative_gradient.abs().amax().clamp_min(1e-6)
             scale = x_curr.mean().clamp_min(1e-6)
+
+            res_mu = (expected - y) / (y.mean(dim=(-2, -1), keepdim=True).clamp_min(1.0))
+            grad_mu = projector.backward(res_mu, mu_curr.detach())
+            scale_mu = grad_mu.abs().amax(dim=(-3, -2, -1), keepdim=True) + 1e-6
+            phys_residual_mu = torch.clamp(grad_mu / scale_mu, min=-3.0, max=3.0)
+
         damp = 0.5 * torch.sigmoid(self.damping_alpha)
         x_tilde = (x_curr + damp * scale * direction).clamp_min(1e-6)
-        mu_in = torch.cat([mu_curr, self._robust_norm(x_tilde), self._robust_norm(lam_scatter), torch.zeros_like(mu_curr)], 1)
+        mu_in = torch.cat([mu_curr, self._robust_norm(x_tilde), self._robust_norm(lam_scatter), phys_residual_mu], 1)
         delta = checkpoint(self.mu_prox_net, mu_in, cond, use_reentrant=False) if self.training else self.mu_prox_net(mu_in, cond)
         scaled = (mu_curr.float() / 0.1).clamp_min(1e-7)
         mu_next = 0.1 * F.softplus(scaled + torch.log(-torch.expm1(-scaled)) + delta.float()/0.1)
@@ -283,18 +234,13 @@ class TrueEndToEndUnrollStage(nn.Module):
         x_tilde = torch.clamp(x_curr * (1.0 + damp * (update_ratio - 1.0)), min=1e-6)
 
         # -------------------------------------------------------------
-        # Step 2: Physical Poisson Sensitivity Gradient for Attenuation
+        # Step 2: Physical Attenuation Residual Backprojection Feature (with safe amax normalization)
         # -------------------------------------------------------------
-        # Path A: do not request PyTomography's attenuation-map derivative.
-        # The measured-data Poisson term trains activity only; mu is trained by
-        # tissue supervision and remains connected through subsequent mu stages.
-        grad_mu = torch.zeros_like(mu_curr)
-
-        # Dynamic Z-Score normalization for grad_mu INPUT FEATURE (direction hint for mu_prox_net)
-        b = grad_mu.shape[0]
-        g_std = grad_mu.view(b, -1).std(dim=-1).view(b, 1, 1, 1, 1).clamp_min(1e-6)
-        g_mean = grad_mu.view(b, -1).mean(dim=-1).view(b, 1, 1, 1, 1)
-        phys_residual_mu = torch.clamp((grad_mu - g_mean) / g_std, min=-3.0, max=3.0)
+        with torch.no_grad():
+            res_mu = (fp_nogr - proj_sub) / (proj_sub.mean(dim=(-2, -1), keepdim=True).clamp_min(1.0))
+            grad_mu = subset_projector.backward(res_mu, mu_curr_detach)
+            scale_mu = grad_mu.abs().amax(dim=(-3, -2, -1), keepdim=True) + 1e-6
+            phys_residual_mu = torch.clamp(grad_mu / scale_mu, min=-3.0, max=3.0)
 
         # -------------------------------------------------------------
         # Step 3: Attenuation Refinement (mu_next)
@@ -478,6 +424,60 @@ class EndToEndPhysicsUnrollSPECTNet(nn.Module):
         }
 
 
+class Separable3DSSIMLoss(nn.Module):
+    """
+    Fast Differentiable 3D SSIM Loss via separable 1D Gaussian convolutions.
+    Numerically exact 3D isotropic Gaussian filter (sigma=1.5, window_size=7).
+    Executes in ~200ms on 128^3 volume.
+    """
+    def __init__(self, window_size: int = 7, sigma: float = 1.5):
+        super().__init__()
+        self.window_size = window_size
+        coords = torch.arange(window_size).float() - window_size // 2
+        g = torch.exp(-(coords ** 2) / (2.0 * sigma ** 2))
+        g = g / g.sum()
+        self.register_buffer("g", g)
+
+    def _separable_conv(self, x: torch.Tensor) -> torch.Tensor:
+        p = self.window_size // 2
+        g = self.g.to(dtype=x.dtype, device=x.device)
+        kx = g.view(1, 1, 1, 1, -1)
+        ky = g.view(1, 1, 1, -1, 1)
+        kz = g.view(1, 1, -1, 1, 1)
+        out = F.conv3d(x, kx, padding=(0, 0, p))
+        out = F.conv3d(out, ky, padding=(0, p, 0))
+        out = F.conv3d(out, kz, padding=(p, 0, 0))
+        return out
+
+    def forward(self, img1: torch.Tensor, img2: torch.Tensor, mask: Optional[torch.Tensor] = None) -> torch.Tensor:
+        with torch.no_grad():
+            data_range = float(img2.max() - img2.min())
+            data_range = max(data_range, 1.0)
+        c1 = (0.01 * data_range) ** 2
+        c2 = (0.03 * data_range) ** 2
+
+        mu1 = self._separable_conv(img1)
+        mu2 = self._separable_conv(img2)
+
+        mu1_sq = mu1 ** 2
+        mu2_sq = mu2 ** 2
+        mu1_mu2 = mu1 * mu2
+
+        sigma1_sq = (self._separable_conv(img1 * img1) - mu1_sq).clamp_min(0.0)
+        sigma2_sq = (self._separable_conv(img2 * img2) - mu2_sq).clamp_min(0.0)
+        sigma12 = self._separable_conv(img1 * img2) - mu1_mu2
+
+        num = (2.0 * mu1_mu2 + c1) * (2.0 * sigma12 + c2)
+        den = (mu1_sq + mu2_sq + c1) * (sigma1_sq + sigma2_sq + c2)
+        ssim_map = num / den.clamp_min(1e-7)
+
+        if mask is not None:
+            mask_bool = mask > 0.5
+            if mask_bool.any():
+                return ssim_map[mask_bool].mean()
+        return ssim_map.mean()
+
+
 def compute_projection_loss(
     act_pred: torch.Tensor,
     mu_pred: torch.Tensor,
@@ -487,9 +487,8 @@ def compute_projection_loss(
 ) -> torch.Tensor:
     """
     Physical Poisson projection loss (Path A):
-      1. NO torch.no_grad()!
-      2. mu_pred uses .detach() so physical operator does not backprop into mu.
-      3. act_pred retains full gradients.
+      Strictly non-negative Poisson deviance / Generalized KL divergence:
+      mean(y_pred - y_true + y_true * log((y_true + 1e-6) / (y_pred + 1e-6)))
     """
     if projector_factory is not None:
         op, proj_sub, scatter_sub = projector_factory.get_subset(proj_gt, scatter_est, subset_idx=None)
@@ -501,37 +500,31 @@ def compute_projection_loss(
         raise ValueError("projector_factory required for compute_projection_loss")
 
     proj_pred_safe = torch.clamp(proj_pred, min=1e-6)
-    target_safe = target_proj.float()
-    loss_poisson = (proj_pred_safe - target_safe * torch.log(proj_pred_safe)).mean()
+    target_safe = torch.clamp(target_proj.float(), min=1e-6)
+    loss_poisson = (proj_pred_safe - target_safe + target_safe * torch.log(target_safe / proj_pred_safe)).mean()
     return loss_poisson
 
 
 class TrueEndToEndSPECTLoss(nn.Module):
     """
-    Composite End-to-End Loss with Scale-Invariant Relative L1:
-      L_total = RelL1(x_final, x_gt) + atten_weight * L_mu + poisson_weight * L_Poisson
-
-    Scale-Invariant Relative L1 (dimensionless):
-      RelL1(pred, gt) = mean(|pred - gt|) / (mean(|gt|) + eps)
-    Normalizes away the ~1000x physical unit difference between activity (0~200 counts)
-    and attenuation (0~0.25 cm^-1), ensuring both branches receive balanced gradients.
-
-    Notes:
-      - poisson_weight default is 1e-3.
-      - Apply clip_grad_norm_(model.parameters(), max_norm=1.0) in training loop after backward().
+    Composite End-to-End Loss with Scale-Invariant Relative L1 + 3D SSIM Loss:
+      L_total = activity_weight * (RelL1 + 0.15 * (1 - SSIM3D)) + atten_weight * L_mu + poisson_weight * L_Poisson
     """
     def __init__(
         self,
         activity_weight: float = 1.0,
-        atten_weight: float = 5.0,            # Aligned: 5.0 * 0.05 ≈ 0.25, balanced with act_rel ~0.44
-        poisson_weight: float = 1e-3,
+        atten_weight: float = 5.0,
+        poisson_weight: float = 1e-2,
+        ssim_weight: float = 0.15,
         eps: float = 1e-5
     ):
         super().__init__()
         self.activity_weight = activity_weight
         self.atten_weight = atten_weight
         self.poisson_weight = poisson_weight
+        self.ssim_weight = ssim_weight
         self.eps = eps
+        self.ssim_loss_fn = Separable3DSSIMLoss(window_size=7, sigma=1.5)
         self.mu_loss_fn = PhysicsUnrolledMuLoss(
             loss_mode="tissue_balanced",
             decay_gamma=0.8,
@@ -564,36 +557,32 @@ class TrueEndToEndSPECTLoss(nn.Module):
         # Body mask for activity (ignore air voxels outside patient)
         mask = (support_mask > 0).float()
 
-        # 1. Scale-invariant relative L1 on activity (dimensionless, ~O(1))
+        # 1. Scale-invariant relative L1 on activity
         rel_l1_act = self._rel_l1(x_pred, x_gt, mask=mask)
 
-        # 2. Tissue-balanced attenuation loss (normalized internally by PhysicsUnrolledMuLoss)
+        # 2. 3D SSIM structural constraint
+        ssim_val = self.ssim_loss_fn(x_pred, x_gt, mask=mask)
+        loss_act = rel_l1_act + self.ssim_weight * (1.0 - ssim_val)
+
+        # 3. Tissue-balanced attenuation loss (normalized internally by PhysicsUnrolledMuLoss)
         mu_loss_dict = self.mu_loss_fn(outputs, mu_gt, support_mask)
         l_mu = mu_loss_dict["loss"]
 
-        # 3. Explicit Poisson deviance (Path A: act_pred has grad, mu_pred is detached)
+        # 4. Strictly non-negative Poisson deviance
         l_poisson = x_pred.new_zeros(())
         if self.poisson_weight > 0.0:
             if projector_factory is not None and proj_gt is not None:
-                l_poisson = compute_projection_loss(
-                    act_pred=x_pred,
-                    mu_pred=mu_pred,
-                    proj_gt=proj_gt,
-                    scatter_est=scatter_est,
-                    projector_factory=projector_factory
-                )
-            elif outputs.get("fp_history") and outputs.get("proj_sub_history"):
-                fp = outputs["fp_history"][-1].clamp_min(1e-6)
-                y = outputs["proj_sub_history"][-1].float()
-                l_poisson = (fp - y * torch.log(fp)).mean()
+                l_poisson = compute_projection_loss(x_pred, mu_pred, proj_gt, scatter_est, projector_factory)
 
-        total_loss = (self.activity_weight  * rel_l1_act
+        total_loss = (self.activity_weight  * loss_act
                       + self.atten_weight   * l_mu
                       + self.poisson_weight * l_poisson)
 
         return {
-            "loss":              total_loss,
+            "loss":             total_loss,
+            "loss_act":         loss_act.detach(),
             "activity_rel_l1":  rel_l1_act.detach(),
+            "activity_ssim":    ssim_val.detach(),
             "atten_loss":       l_mu.detach(),
             "poisson_loss":     l_poisson.detach(),
         }

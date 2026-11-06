@@ -1,0 +1,44 @@
+{
+  "modules": [
+    "/home/wengfenghua/workspace/SparseSPECT/ctless-unroll/train_true_unroll_siemens_nii.py",
+    "/home/wengfenghua/workspace/SparseSPECT/ctless-unroll/models/true_unroll_spect.py",
+    "/home/wengfenghua/workspace/SparseSPECT/ctless-unroll/nmrecon_training_projector.py",
+    "/home/wengfenghua/workspace/SparseSPECT/ctless-unroll/nmrecon_autograd/nmrecon_torch.py"
+  ],
+  "library": {
+    "path": "/home/wengfenghua/workspace/SparseSPECT/ctless-unroll/nmrecon_autograd/build/libnmrecon.so",
+    "sha256": "c9062d390e89b8d67c7681525763a4d20eac3a1c8fde034d67375bb2a5f42761"
+  },
+  "case": "601344948",
+  "results": [
+    {
+      "weight": 0.0,
+      "seconds": 39.67913997400319,
+      "calls": {
+        "backproject": 33,
+        "forward": 25
+      },
+      "mu_grad_norm": 9.977200508117676,
+      "act_grad_norm": 5.916362762451172,
+      "loss": 0.9201010465621948,
+      "activity_rel_l1": 0.4151110351085663,
+      "atten_loss": 0.10099800676107407,
+      "poisson_loss": 0.0
+    },
+    {
+      "weight": 0.001,
+      "seconds": 34.22095971298404,
+      "calls": {
+        "backproject": 34,
+        "forward": 25
+      },
+      "mu_grad_norm": 9.977201461791992,
+      "act_grad_norm": 5.938800811767578,
+      "loss": 0.9217320680618286,
+      "activity_rel_l1": 0.4151110351085663,
+      "atten_loss": 0.10099800676107407,
+      "poisson_loss": 1.631022572517395,
+      "activity_gradient_delta_norm": 0.027856871485710144
+    }
+  ]
+}

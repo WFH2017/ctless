@@ -22,23 +22,18 @@ from torch.optim import AdamW
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from skimage.metrics import structural_similarity as ssim
 
-# Workspace path setup
-CTLESS_DIR = '/home/wengfenghua/workspace/SparseSPECT/ctless'
-SPLITS_DIR = os.path.join(CTLESS_DIR, 'splits_ge_nii')
-NEW1022_PATH = '/home/wengfenghua/sparseSPECT/0913ctless'
-LOCAL_DIR = os.path.dirname(os.path.abspath(__file__))
-if LOCAL_DIR not in sys.path:
-    sys.path.insert(0, LOCAL_DIR)
-if CTLESS_DIR not in sys.path:
-    sys.path.insert(0, CTLESS_DIR)
-if NEW1022_PATH not in sys.path:
-    sys.path.insert(0, NEW1022_PATH)
+# Local code and data: never prioritize a sibling experiment directory.
+CTLESS_DIR = str(Path(__file__).resolve().parent)
+if CTLESS_DIR in sys.path:
+    sys.path.remove(CTLESS_DIR)
+sys.path.insert(0, CTLESS_DIR)
+SPLITS_DIR = os.path.join(CTLESS_DIR, "splits_ge_nii")
 
 from models.true_unroll_spect import (
     EndToEndPhysicsUnrollSPECTNet,
     TrueEndToEndSPECTLoss
 )
-from new1022.model import projector_from_batch as pytomography_projector_from_batch
+from models.pytomography_support import projector_from_batch as pytomography_projector_from_batch
 try:
     from nmrecon_training_projector import projector_from_batch as nmrecon_projector_from_batch
 except ImportError:
@@ -137,6 +132,8 @@ def compute_eval_metrics(
 ) -> dict:
     """Computes comprehensive Activity & Attenuation validation metrics."""
     body_mask = support_mask > 0.5
+    if np.count_nonzero(body_mask) <= 10:
+        raise ValueError("Body mask has too few valid voxels for evaluation")
     
     # 1. Activity PSNR & SSIM inside body mask
     diff_x = x_pred[body_mask] - x_gt[body_mask]
@@ -144,14 +141,20 @@ def compute_eval_metrics(
     max_x = float(np.max(x_gt[body_mask])) if np.sum(body_mask) > 10 else 100.0
     act_psnr = float(10 * np.log10((max_x ** 2) / max(mse_x, 1e-10)))
 
-    # Activity SSIM sampled across axial slices
-    valid_z = [z for z in range(x_gt.shape[0]) if np.sum(body_mask[z]) > 20]
-    sample_z = valid_z[::max(1, len(valid_z) // 16)]
-    x_ssims = []
-    for z in sample_z:
-        s = ssim(x_pred[z], x_gt[z], data_range=max_x)
-        x_ssims.append(s)
-    act_ssim = float(np.mean(x_ssims)) if x_ssims else 0.85
+    # SSIM centers must have their entire 7x7 window inside the body.
+    from scipy.ndimage import binary_erosion
+    ssim_vals = []
+    z_indices = np.unique(np.linspace(0, x_gt.shape[0]-1, min(12, x_gt.shape[0]), dtype=int))
+    for z in z_indices:
+        valid = binary_erosion(body_mask[z], structure=np.ones((7, 7), dtype=bool))
+        if not valid.any():
+            continue
+        gt_slice, pred_slice = x_gt[z], x_pred[z]
+        data_range = float(np.ptp(gt_slice[body_mask[z]]))
+        if data_range > 0:
+            _, ssim_map = ssim(pred_slice, gt_slice, data_range=data_range, win_size=7, full=True)
+            ssim_vals.append(float(ssim_map[valid].mean()))
+    act_ssim = float(np.mean(ssim_vals)) if ssim_vals else float('nan')
 
     # 2. Attenuation Metrics
     bone_mask = (mu_gt > 0.175) & body_mask

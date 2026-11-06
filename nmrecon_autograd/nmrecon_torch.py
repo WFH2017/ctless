@@ -5,8 +5,8 @@ Integrates compiled NMRecon C++/CUDA Distance-Driven physics into PyTorch Autogr
 Features:
 - Direct GPU device-to-device execution (no disk I/O, no subprocess)
 - Mathematically exact adjoint backprojection: <A x, g> == <x, A^T g> (error < 1e-5)
-- True physical attenuation gradient pass-through for mu
-- Supports single-volume (128, 128, 128) and batched (B, 1, 128, 128, 128) tensors
+- Path A: attenuation is detached; only activity has a physical adjoint gradient
+- Supports a single volume, optionally with leading [1, 1] dimensions
 """
 
 import os
@@ -18,8 +18,8 @@ from pathlib import Path
 
 _CURR_DIR = Path(__file__).resolve().parent
 _LOCAL_SO = _CURR_DIR / "build" / "libnmrecon.so"
-_CANONICAL_SO = Path("/home/wengfenghua/workspace/SparseSPECT/nmrecon_autograd/build/libnmrecon.so")
-DEFAULT_LIB_PATH = str(_LOCAL_SO if _LOCAL_SO.exists() else _CANONICAL_SO)
+DEFAULT_LIB_PATH = str(_LOCAL_SO)
+
 
 
 class NMReconCAPI:
@@ -29,6 +29,11 @@ class NMReconCAPI:
     def __init__(self, lib_path: str = DEFAULT_LIB_PATH):
         if not os.path.exists(lib_path):
             raise FileNotFoundError(f"Cannot find NMRecon shared library at {lib_path}")
+        import hashlib, json
+        expected = json.loads((_CURR_DIR / 'library_manifest.json').read_text())['sha256']
+        actual = hashlib.sha256(Path(lib_path).read_bytes()).hexdigest()
+        if actual != expected:
+            raise RuntimeError("NMRecon library SHA256 mismatch; validate and update manifest before use")
         self.lib = ctypes.CDLL(lib_path)
         
         # void* nmrecon_create(const char* config_json_path, int device_id)
@@ -149,10 +154,16 @@ class NMReconDeviceOperator:
 class NMReconFunction(torch.autograd.Function):
     """
     Exact PyTorch Autograd Function for NMRecon.
-    Passes gradients to BOTH activity x and attenuation mu.
+    Returns activity adjoint gradients only (Path A).
     """
     @staticmethod
     def forward(ctx, activity: torch.Tensor, mu_cm: torch.Tensor, operator: NMReconDeviceOperator):
+        if mu_cm is not None and mu_cm.requires_grad:
+            raise ValueError("Path A requires mu.detach(); physical mu derivatives are unsupported")
+        if activity.ndim not in (3, 5) or (activity.ndim == 5 and activity.shape[:2] != (1, 1)):
+            raise ValueError("NMRecon supports exactly one single-channel volume")
+        if tuple(activity.shape[-3:]) != operator.image_shape:
+            raise ValueError("Activity shape does not match native geometry")
         ctx.operator = operator
         is_batched = (activity.ndim == 5)
         ctx.is_batched = is_batched
@@ -193,16 +204,7 @@ class NMReconFunction(torch.autograd.Function):
                 if ctx.is_batched:
                     grad_act = grad_act.unsqueeze(0).unsqueeze(0)
                     
-        # 2. Gradient w.r.t attenuation mu: dL/dmu
-        if ctx.needs_input_grad[1] and mu_3d is not None:
-            with torch.no_grad():
-                # dL/dmu = - A^T(dL/dy * proj, mu)
-                # Matches finite difference directional derivatives in both sign and anatomy
-                flux_grad = grad_p_3d * proj_3d
-                grad_mu = - operator.backproject(flux_grad, mu_3d)
-                if ctx.is_batched:
-                    grad_mu = grad_mu.unsqueeze(0).unsqueeze(0)
-                    
+        # Path A: no physical attenuation derivative.
         return grad_act, grad_mu, None
 
 

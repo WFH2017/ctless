@@ -16,7 +16,7 @@ import torch
 import torch.nn as nn
 
 UNROLL_DIR = '/home/wengfenghua/workspace/SparseSPECT/ctless-unroll'
-CTLESS_DIR = '/home/wengfenghua/workspace/SparseSPECT/ctless'
+CTLESS_DIR = UNROLL_DIR
 sys.path.insert(0, UNROLL_DIR)
 sys.path.insert(0, CTLESS_DIR)
 
@@ -100,7 +100,8 @@ def test_step(poisson_weight: float, device: str = "cuda:0"):
         projector_factory=projector
     )
     loss = loss_dict['loss']
-    print(f"[*] Loss: {loss.item():.4f} | ActRelL1: {loss_dict['activity_rel_l1'].item():.4f} | MuLoss: {loss_dict['atten_loss'].item():.4f} | Poisson: {loss_dict.get('poisson_loss', torch.tensor(0.0)).item():.4f}")
+    act_ssim = loss_dict.get('activity_ssim', torch.tensor(0.0)).item()
+    print(f"[*] Loss: {loss.item():.4f} | ActRelL1: {loss_dict['activity_rel_l1'].item():.4f} | ActSSIM: {act_ssim:.4f} | MuLoss: {loss_dict['atten_loss'].item():.4f} | Poisson: {loss_dict.get('poisson_loss', torch.tensor(0.0)).item():.4f}")
 
     # 4. Backward pass
     torch.cuda.synchronize()
@@ -113,8 +114,10 @@ def test_step(poisson_weight: float, device: str = "cuda:0"):
     # 5. Measure gradient norms
     mu_grad_norm = sum(p.grad.norm().item() for net in model.mu_nets for p in net.parameters() if p.grad is not None)
     act_grad_norm = sum(p.grad.norm().item() for net in model.act_nets for p in net.parameters() if p.grad is not None)
-    print(f"[*] mu_net total grad norm:  {mu_grad_norm:.8f}")
-    print(f"[*] act_net total grad norm: {act_grad_norm:.8f}")
+    damp_grad_norm = sum(s.damping_alpha.grad.norm().item() for s in model.stages if s.damping_alpha.grad is not None)
+    print(f"[*] mu_net total grad norm:        {mu_grad_norm:.8f}")
+    print(f"[*] act_net total grad norm:       {act_grad_norm:.8f}")
+    print(f"[*] damping_alpha total grad norm: {damp_grad_norm:.8f}")
 
     return {
         'poisson_weight': poisson_weight,
@@ -123,25 +126,21 @@ def test_step(poisson_weight: float, device: str = "cuda:0"):
         't_bwd': t_bwd,
         'loss': loss.item(),
         'mu_grad_norm': mu_grad_norm,
-        'act_grad_norm': act_grad_norm
+        'act_grad_norm': act_grad_norm,
+        'damp_grad_norm': damp_grad_norm
     }
 
 if __name__ == "__main__":
-    dev = "cuda:0"
-    print(">>> RUNNING WITH POISSON WEIGHT = 0.0")
-    res_0 = test_step(poisson_weight=0.0, device=dev)
-
-    print("\n>>> RUNNING WITH POISSON WEIGHT = 0.001")
-    res_1 = test_step(poisson_weight=0.001, device=dev)
-
+    dev = sys.argv[1] if len(sys.argv) > 1 else "cuda:1"
+    print(f"Running test on device: {dev}")
+    print(">>> RUNNING WITH POISSON WEIGHT = 0.01 (v2 target)")
+    res = test_step(poisson_weight=0.01, device=dev)
     print("\n" + "=" * 65)
-    print(" SUMMARY COMPARISON: NMRecon Zero-Copy Autograd")
+    print(" SUMMARY: NMRecon Zero-Copy Autograd v2 Test")
     print("=" * 65)
-    print(f"poisson_weight = 0.000: act_net grad norm = {res_0['act_grad_norm']:.8e}")
-    print(f"poisson_weight = 0.001: act_net grad norm = {res_1['act_grad_norm']:.8e}")
-    delta = res_1['act_grad_norm'] - res_0['act_grad_norm']
-    pct = (delta / res_0['act_grad_norm']) * 100
-    print(f"Gradient Delta: {delta:+.8e} ({pct:+.2f}%)")
-    print(f"mu_net grad norm: {res_1['mu_grad_norm']:.8e} (Grad graph active across stages!)")
-    print(f"Step Time: Forward {res_1['t_fwd']:.2f}s | Backward {res_1['t_bwd']:.2f}s | Projector Init {res_1['t_proj']*1000:.2f}ms")
+    print(f"Loss: {res['loss']:.4f}")
+    print(f"mu_net grad norm:        {res['mu_grad_norm']:.8e}")
+    print(f"act_net grad norm:       {res['act_grad_norm']:.8e}")
+    print(f"damping_alpha grad norm: {res['damp_grad_norm']:.8e}")
+    print(f"Timing: Forward {res['t_fwd']:.2f}s | Backward {res['t_bwd']:.2f}s | Projector {res['t_proj']*1000:.2f}ms")
     print("=" * 65)

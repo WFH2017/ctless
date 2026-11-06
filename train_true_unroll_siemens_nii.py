@@ -23,22 +23,15 @@ from torch.optim import AdamW
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from skimage.metrics import structural_similarity as ssim
 
-# Setup workspace paths
-LOCAL_DIR = os.path.dirname(os.path.abspath(__file__))
-if LOCAL_DIR not in sys.path:
-    sys.path.insert(0, LOCAL_DIR)
-CTLESS_DIR = "/home/wengfenghua/workspace/SparseSPECT/ctless"
-SPARSESPECT_DIR = "/home/wengfenghua/sparseSPECT/0913ctless"
-if CTLESS_DIR not in sys.path:
-    sys.path.insert(0, CTLESS_DIR)
-if SPARSESPECT_DIR not in sys.path:
-    sys.path.insert(0, SPARSESPECT_DIR)
-NEW1022_DIR = "/home/wengfenghua/sparseSPECT/0913ctless/new1022"
-if NEW1022_DIR not in sys.path:
-    sys.path.insert(0, NEW1022_DIR)
+# Local code and data: never prioritize a sibling experiment directory.
+CTLESS_DIR = str(Path(__file__).resolve().parent)
+if CTLESS_DIR in sys.path:
+    sys.path.remove(CTLESS_DIR)
+sys.path.insert(0, CTLESS_DIR)
+SPLITS_DIR = os.path.join(CTLESS_DIR, "splits_siemens_nii")
 
 from models.true_unroll_spect import EndToEndPhysicsUnrollSPECTNet, TrueEndToEndSPECTLoss
-from new1022.model import projector_from_batch as pytomography_projector_from_batch
+from models.pytomography_support import projector_from_batch as pytomography_projector_from_batch
 try:
     from nmrecon_training_projector import projector_from_batch as nmrecon_projector_from_batch
 except ImportError:
@@ -143,6 +136,8 @@ def compute_eval_metrics(
 ) -> dict:
     """Computes comprehensive Activity & Attenuation validation metrics."""
     body_mask = support_mask > 0.5
+    if np.count_nonzero(body_mask) <= 10:
+        raise ValueError("Body mask has too few valid voxels for evaluation")
 
     # 1. Activity PSNR & SSIM inside body mask
     diff_x = x_pred[body_mask] - x_gt[body_mask]
@@ -150,26 +145,29 @@ def compute_eval_metrics(
     max_x = float(np.max(x_gt[body_mask])) if np.sum(body_mask) > 10 else 100.0
     act_psnr = float(10 * np.log10((max_x ** 2) / max(mse_x, 1e-10)))
 
-    # Activity SSIM sampled across axial slices
+    # SSIM centers must have their entire 7x7 window inside the body.
+    from scipy.ndimage import binary_erosion
     ssim_vals = []
-    z_indices = np.linspace(20, 108, 12, dtype=int)
+    z_indices = np.unique(np.linspace(0, x_gt.shape[0]-1, min(12, x_gt.shape[0]), dtype=int))
     for z in z_indices:
-        gt_slice = x_gt[z]
-        pred_slice = x_pred[z]
-        data_range = float(np.max(gt_slice) - np.min(gt_slice))
-        if data_range > 1e-3:
-            s = ssim(pred_slice, gt_slice, data_range=data_range)
-            ssim_vals.append(s)
-    act_ssim = float(np.mean(ssim_vals)) if ssim_vals else 0.0
+        valid = binary_erosion(body_mask[z], structure=np.ones((7, 7), dtype=bool))
+        if not valid.any():
+            continue
+        gt_slice, pred_slice = x_gt[z], x_pred[z]
+        data_range = float(np.ptp(gt_slice[body_mask[z]]))
+        if data_range > 0:
+            _, ssim_map = ssim(pred_slice, gt_slice, data_range=data_range, win_size=7, full=True)
+            ssim_vals.append(float(ssim_map[valid].mean()))
+    act_ssim = float(np.mean(ssim_vals)) if ssim_vals else float('nan')
 
     # 2. Attenuation Metrics
     bone_mask = (mu_gt > 0.175) & body_mask
     lung_mask = (mu_gt > 0.02) & (mu_gt < 0.12) & body_mask
     soft_mask = (mu_gt >= 0.12) & (mu_gt <= 0.175) & body_mask
 
-    bone_mae = float(np.mean(np.abs(mu_pred[bone_mask] - mu_gt[bone_mask]))) if np.sum(bone_mask) > 10 else 0.0
-    lung_mae = float(np.mean(np.abs(mu_pred[lung_mask] - mu_gt[lung_mask]))) if np.sum(lung_mask) > 10 else 0.0
-    soft_mae = float(np.mean(np.abs(mu_pred[soft_mask] - mu_gt[soft_mask]))) if np.sum(soft_mask) > 10 else 0.0
+    bone_mae = float(np.mean(np.abs(mu_pred[bone_mask] - mu_gt[bone_mask]))) if np.sum(bone_mask) > 10 else float('nan')
+    lung_mae = float(np.mean(np.abs(mu_pred[lung_mask] - mu_gt[lung_mask]))) if np.sum(lung_mask) > 10 else float('nan')
+    soft_mae = float(np.mean(np.abs(mu_pred[soft_mask] - mu_gt[soft_mask]))) if np.sum(soft_mask) > 10 else float('nan')
 
     diff_mu = mu_pred[body_mask] - mu_gt[body_mask]
     mse_mu = float(np.mean(diff_mu ** 2)) if np.sum(body_mask) > 10 else 1e-4
@@ -200,12 +198,14 @@ def parse_args():
     parser.add_argument("--weight-decay", type=float, default=1e-4, help="Weight decay")
     parser.add_argument("--gpu-id", type=int, default=0, help="GPU index to use")
     parser.add_argument("--num-workers", type=int, default=4, help="DataLoader workers")
-    parser.add_argument("--poisson_weight", "--poisson-weight", type=float, default=1e-3, help="Physical Poisson projection loss weight")
+    parser.add_argument("--poisson_weight", "--poisson-weight", type=float, default=1e-2, help="Physical Poisson projection loss weight")
+    parser.add_argument("--ssim-weight", type=float, default=0.15, help="3D SSIM structural loss weight")
     parser.add_argument("--projector_type", "--projector-type", type=str, default="nmrecon", choices=["nmrecon", "pytomography"], help="Physics projector backend")
     parser.add_argument("--output-dir", type=str, default=os.path.join(CTLESS_DIR, "experiments_true_unroll_siemens_nii"))
     parser.add_argument("--cache-dir", type=str, default=os.path.join(CTLESS_DIR, "data", "cache_siemens_nii"))
     parser.add_argument("--pretrained-mu-ckpt", type=str,
                         default="/home/wengfenghua/sparseSPECT/0913ctless/new1022/checkpoints/ge_planB_v2_unrolled_balanced/checkpoint_best_unrolled.pt")
+    parser.add_argument("--hotstart-ckpt", type=str, default=None, help="Hotstart fine-tune from a trained full-model checkpoint")
     parser.add_argument("--resume", action="store_true", help="Resume from latest checkpoint if available")
     return parser.parse_args()
 
@@ -279,6 +279,20 @@ def main():
         if metrics_history:
             best_val_act_psnr = max([m.get('val_act_psnr', -float('inf')) for m in metrics_history] + [best_val_act_psnr])
         log_print(f"Resumed at epoch {start_epoch}, previous best Act PSNR: {best_val_act_psnr:.2f} dB")
+    elif args.hotstart_ckpt and os.path.exists(args.hotstart_ckpt):
+        log_print(f"Hot-starting model weights from: {args.hotstart_ckpt}")
+        ckpt_hot = torch.load(args.hotstart_ckpt, map_location=device, weights_only=False)
+        state_dict = ckpt_hot['model'] if 'model' in ckpt_hot else ckpt_hot
+        model.load_state_dict(state_dict, strict=False)
+        # Point 1: Reset damping_alpha to -0.5
+        for s in model.stages:
+            s.damping_alpha.data.fill_(-0.5)
+        damp_init = 0.5 * torch.sigmoid(model.stages[0].damping_alpha).item()
+        log_print(f"Successfully loaded hotstart checkpoint. Reset damping_alpha to -0.5 (damp0 ~ {damp_init:.4f}).")
+        start_epoch = 1
+        best_val_act_psnr = float(ckpt_hot.get('best_val_act_psnr', 48.61))
+        log_print(f"Hotstart baseline Act PSNR to beat: {best_val_act_psnr:.2f} dB (targeting 49.5+ dB)")
+        metrics_history = []
     elif os.path.exists(args.pretrained_mu_ckpt):
         log_print(f"Loading pretrained mu-network weights from: {args.pretrained_mu_ckpt}")
         ckpt = torch.load(args.pretrained_mu_ckpt, map_location='cpu', weights_only=False)
@@ -297,15 +311,37 @@ def main():
         projector_fn = pytomography_projector_from_batch
     log_print(f"物理投影算子后端: {args.projector_type} ({projector_fn.__module__ if hasattr(projector_fn, '__module__') else 'custom'})")
     log_print(f"泊松投影损失权重 (poisson_weight): {args.poisson_weight}")
+    log_print(f"结构损失权重 (ssim_weight): {args.ssim_weight}")
 
     # 3. Loss & Optimizer (aligned 1:1 scale between activity and attenuation)
     criterion = TrueEndToEndSPECTLoss(
         activity_weight=1.0,
         atten_weight=5.0,
-        poisson_weight=args.poisson_weight
+        poisson_weight=args.poisson_weight,
+        ssim_weight=args.ssim_weight
     ).to(device)
 
-    optimizer = AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    # Separate damping_alpha into high-lr group (lr = 10 * base_lr)
+    damping_params = []
+    other_params = []
+    for name, param in model.named_parameters():
+        if not param.requires_grad:
+            continue
+        if "damping_alpha" in name:
+            damping_params.append(param)
+        else:
+            other_params.append(param)
+
+    damping_params = list({id(p): p for p in damping_params}.values())
+    other_params = list({id(p): p for p in other_params}.values())
+
+    damp_lr = args.lr * 10.0
+    optimizer = AdamW([
+        {"params": other_params, "lr": args.lr, "weight_decay": args.weight_decay},
+        {"params": damping_params, "lr": damp_lr, "weight_decay": 0.0}
+    ])
+    log_print(f"优化器参数组配置: 主干参数 {len(other_params)} 个 (lr={args.lr:.2e}), 阻尼参数 {len(damping_params)} 个 (lr={damp_lr:.2e})")
+
     scheduler = CosineAnnealingLR(optimizer, T_max=args.epochs, eta_min=1e-6)
     if ckpt_resumed is not None and 'scheduler' in ckpt_resumed:
         try:
@@ -371,12 +407,16 @@ def main():
             if step == 1 and epoch == start_epoch:
                 mu_grads = [p.grad.abs().mean().item() for net in model.mu_nets for p in net.parameters() if p.grad is not None]
                 act_grads = [p.grad.abs().mean().item() for net in model.act_nets for p in net.parameters() if p.grad is not None]
+                damp_grads = [s.damping_alpha.grad.abs().item() for s in model.stages if s.damping_alpha.grad is not None]
                 mu_norm = (sum(mu_grads) / len(mu_grads)) if mu_grads else None
                 act_norm = (sum(act_grads) / len(act_grads)) if act_grads else None
-                log_print("=" * 60)
-                log_print(f"Check Grad -> mu_net: {mu_norm} ({len(mu_grads)} params with grad)")
-                log_print(f"Check Grad -> act_net: {act_norm} ({len(act_grads)} params with grad)")
-                log_print("=" * 60)
+                damp_norm = (sum(damp_grads) / len(damp_grads)) if damp_grads else None
+                init_damp_val = 0.5 * torch.sigmoid(model.stages[0].damping_alpha).item()
+                log_print("=" * 65)
+                log_print(f"Check Grad -> mu_net: {mu_norm:.6e} ({len(mu_grads)} params with grad)")
+                log_print(f"Check Grad -> act_net: {act_norm:.6e} ({len(act_grads)} params with grad)")
+                log_print(f"Check Grad -> damping_alpha: {damp_norm:.6e} (lr={damp_lr:.2e}, initial damp0={init_damp_val:.4f})")
+                log_print("=" * 65)
 
             train_loss_sum += loss.item() * args.grad_accum_steps
             train_act_rel_sum += loss_dict['activity_rel_l1'].item()
@@ -389,10 +429,12 @@ def main():
 
             if step % 25 == 0 or step == n_batches:
                 damp0 = 0.5 * torch.sigmoid(model.stages[0].damping_alpha).item()
+                act_ssim = loss_dict.get('activity_ssim', torch.tensor(0.0)).item()
                 log_print(
                     f"Epoch [{epoch:02d}/{args.epochs:02d}] Step [{step:03d}/{n_batches:03d}] | "
                     f"Loss: {loss.item() * args.grad_accum_steps:.4f} | "
                     f"ActRelL1: {loss_dict['activity_rel_l1'].item():.4f} | "
+                    f"ActSSIM: {act_ssim:.4f} | "
                     f"MuLoss: {loss_dict['atten_loss'].item():.4f} | "
                     f"PoissonLoss: {loss_dict['poisson_loss'].item():.4f} | "
                     f"Damp0: {damp0:.4f}"

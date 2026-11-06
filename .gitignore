@@ -26,6 +26,8 @@ sample_inference_*.pt
 
 # Training runs, logs, checkpoints, outputs
 experiments_*/
+checkpoints_v1_backup/
+archive/
 *.log
 *.pid
 runs/
